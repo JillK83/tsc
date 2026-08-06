@@ -8,6 +8,13 @@
       "when": 1785975984256,
       "tag": "0000_funny_thunderball",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1786037857150,
+      "tag": "0001_clammy_mastermind",
+      "breakpoints": true
     }
   ]
 }

@@ -4,23 +4,86 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme inline {
-  /* Light mode tokens */
-  --color-background: #ffffff;
-  --color-foreground: #171717;
-  --color-surface: #f5f5f5;
-  --color-border: #e5e5e5;
-  --color-muted: #737373;
+  /* TSC Design System v1 — Surface tokens (light) */
+  --color-page:         #EEECEA;
+  --color-card:         #FFFFFF;
+  --color-elevated:     #FAFAF8;
+  --color-selected:     #EBF2FD;
+  --color-perf-tile:    #0F1D2A;
+
+  /* TSC Design System v1 — Text tokens (light) */
+  --color-text-primary:     #0F1515;
+  --color-text-secondary:   #6B7280;
+  --color-text-muted:       #9CA3AF;
+  --color-text-performance: #E8632A;
+
+  /* TSC Design System v1 — Accent tokens */
+  --color-int-tint:    #EBF2FD;
+  --color-int-base:    #4A83D8;
+  --color-int-dark:    #2E65BE;
+  --color-perf-tint:   #FDE8DC;
+  --color-perf-base:   #E8632A;
+  --color-perf-dark:   #C04E1E;
+
+  /* TSC Design System v1 — Semantic tokens */
+  --color-success-tint:   #D6F0E5;
+  --color-success-text:   #1E6E4C;
+  --color-warning-tint:   #FDF3DC;
+  --color-warning-border: #C98E24;
+  --color-warning-text:   #A67520;
+  --color-error-tint:     #FDEAEA;
+  --color-error-text:     #A83232;
+
+  /* TSC Design System v1 — Border tokens (light) */
+  --color-border-1: #D9D3CC;
+  --color-border-2: #E6E2DE;
+
+  /* Legacy aliases for existing component usage */
+  --color-background: #EEECEA;
+  --color-foreground: #0F1515;
+  --color-surface:    #FAFAF8;
+  --color-border:     #D9D3CC;
+  --color-muted:      #9CA3AF;
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 .dark {
-  --color-background: #0a0a0a;
-  --color-foreground: #ededed;
-  --color-surface: #1a1a1a;
-  --color-border: #2a2a2a;
-  --color-muted: #a3a3a3;
+  /* TSC Design System v1 — Surface tokens (dark) */
+  --color-page:         #181A1C;
+  --color-card:         #262A2F;
+  --color-elevated:     #2D3338;
+  --color-selected:     rgba(90, 141, 238, 0.15);
+  --color-perf-tile:    #0A1219;
+
+  /* TSC Design System v1 — Text tokens (dark) */
+  --color-text-primary:     #F3F4F6;
+  --color-text-secondary:   #9CA3AF;
+  --color-text-muted:       #6B7280;
+  --color-text-performance: #F07848;
+
+  /* TSC Design System v1 — Accent tokens (dark) */
+  --color-int-tint:  rgba(90, 141, 238, 0.15);
+  --color-int-base:  #5A8DEE;
+  --color-perf-tint: #3D2318;
+  --color-perf-base: #F07848;
+
+  /* TSC Design System v1 — Semantic tokens (dark) */
+  --color-success-text: #5ECFA0;
+  --color-warning-text: #E5B84A;
+  --color-error-text:   #EF8E8E;
+
+  /* TSC Design System v1 — Border tokens (dark) */
+  --color-border-1: #383C40;
+  --color-border-2: #30353A;
+
+  /* Legacy aliases */
+  --color-background: #181A1C;
+  --color-foreground: #F3F4F6;
+  --color-surface:    #2D3338;
+  --color-border:     #383C40;
+  --color-muted:      #6B7280;
 }
 
 body {

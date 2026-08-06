@@ -26,6 +26,7 @@ export const printPaperSizeEnum = pgEnum('print_paper_size', [
   'letter_8_5x11',
   'a4',
 ])
+export const printColorEnum = pgEnum('print_color', ['color', 'bw'])
 export const sexEnum = pgEnum('sex', ['male', 'female'])
 export const testTypeEnum = pgEnum('test_type', ['20M_MST', 'speed'])
 
@@ -45,6 +46,7 @@ export const users = pgTable('users', {
     .references(() => schools.id),
   email: text('email').notNull(),
   role: roleEnum('role').notNull(),
+  onboardingCompletedAt: timestamp('onboarding_completed_at'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
 
@@ -60,6 +62,7 @@ export const programs = pgTable('programs', {
   printPaperSize: printPaperSizeEnum('print_paper_size')
     .notNull()
     .default('letter_8_5x11'),
+  printColor: printColorEnum('print_color').notNull().default('color'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
 

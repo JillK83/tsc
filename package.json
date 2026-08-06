@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "test": "vitest run",
     "lint": "eslint",
     "db:generate": "node --env-file=.env.local ./node_modules/.bin/drizzle-kit generate",
     "db:migrate": "node --env-file=.env.local ./node_modules/.bin/drizzle-kit migrate",
@@ -14,8 +15,10 @@
   "dependencies": {
     "@clerk/nextjs": "^7.6.5",
     "@neondatabase/serverless": "^1.1.0",
+    "@types/papaparse": "^5.5.2",
     "drizzle-orm": "^0.45.2",
     "next": "16.3.0",
+    "papaparse": "^5.5.4",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
@@ -24,10 +27,12 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv-cli": "^11.0.0",
     "drizzle-kit": "^0.31.10",
     "eslint": "^9",
     "eslint-config-next": "16.3.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.10"
   }
 }
