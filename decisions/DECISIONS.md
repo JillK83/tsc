@@ -182,10 +182,19 @@
 
 ---
 
+### school_id added to test_sessions, mas_results, speed_results
+**Date:** August 2026 (Phase 1 build)
+**Decision:** `school_id` column added to `test_sessions`, `mas_results`, and `speed_results` even though schema.md v2 does not list it on those tables.
+**Why:** The RLS hard constraint (DECISIONS.md: "every table, before any data is written") requires a direct `school_id` column for the `school_isolation` policy to work efficiently. A policy using EXISTS or JOIN subqueries against parent tables is possible but slow and fragile. Denormalizing `school_id` onto every table is the standard pattern for PostgreSQL RLS at this scale.
+**How to apply:** Any future table additions must include `school_id` before the first migration. schema.md should be treated as the logical schema; this decision governs the physical schema.
+**Alternatives rejected:** RLS via EXISTS subquery (slower, harder to index, more failure surface)
+
+---
+
 ## Open decisions — resolve before building those components
 
 - [ ] Product name — finalize before public beta
-- [ ] Neon RLS policies — write and test before any beta data
+- [x] Neon RLS policies — written and applied in Phase 1 (school_isolation on all 7 tables, live in Neon)
 - [ ] Clerk magic link — test delivery to school email addresses (spam filter risk)
 - [ ] Vercel URL / domain — set before sharing with director
 - [ ] Beta Log Google Doc — create and share with GA consultant
