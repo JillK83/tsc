@@ -191,6 +191,15 @@
 
 ---
 
+### Clerk createRouteMatcher — deprecated in v7, migrate before production
+**Date:** August 2026 (Phase 1 build)
+**Decision:** `createRouteMatcher` is deprecated in `@clerk/nextjs` v7. Current `proxy.ts` uses it for path-based auth protection. Not breaking in V1 but must be migrated before production.
+**Why:** Clerk's guidance is to move auth checks into each page, layout, API route, or Server Function that accesses protected data. Path-matching in proxy/middleware can diverge from how Next.js actually routes requests and leave protected resources reachable.
+**How to apply:** Before production, remove `createRouteMatcher` from `proxy.ts` and add `auth.protect()` or equivalent checks directly in each protected page/layout. The dashboard page already calls `currentUser()` — extend that pattern.
+**Alternatives rejected:** Keeping path-matching long-term (deprecated, fragile against Next.js routing edge cases)
+
+---
+
 ## Open decisions — resolve before building those components
 
 - [ ] Product name — finalize before public beta
