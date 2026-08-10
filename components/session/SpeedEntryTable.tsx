@@ -308,7 +308,7 @@ export function SpeedEntryTable({
               </th>
               <th className="px-3 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.05em] text-[#6B7280] dark:text-[#9CA3AF] w-[20%]">
                 <span className="block">10m Fly Time (s)</span>
-                <span className="block text-[10px] font-normal normal-case tracking-normal text-[#9CA3AF] mt-0.5">
+                <span className="block text-center text-[10px] font-normal normal-case tracking-normal text-[#9CA3AF] mt-0.5">
                   20m build-up + 10m timed section
                 </span>
               </th>
@@ -437,7 +437,7 @@ function SpeedEntryRow({ row, onInputChange, onBlur, onNotesChange }: RowProps) 
         </td>
 
         {/* Fly time input */}
-        <td className="px-3 py-2">
+        <td className="px-3 py-2 text-center">
           <div>
             <input
               ref={inputRef}
@@ -461,7 +461,7 @@ function SpeedEntryRow({ row, onInputChange, onBlur, onNotesChange }: RowProps) 
               aria-label={`10m fly time for ${row.name}`}
               aria-invalid={status === 'invalid'}
               className={[
-                'w-[120px] px-3 py-1.5 text-sm text-right rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#EBF2FD] dark:focus:ring-[rgba(90,141,238,0.15)] transition-colors font-variant-numeric tabular-nums',
+                'block mx-auto w-[120px] px-3 py-1.5 text-sm text-right rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#EBF2FD] dark:focus:ring-[rgba(90,141,238,0.15)] transition-colors font-variant-numeric tabular-nums',
                 status === 'invalid'
                   ? 'border-[#A83232] bg-[#FDEAEA] dark:bg-[rgba(168,50,50,0.15)] text-[#0F1515] dark:text-[#F3F4F6] focus:border-[#A83232]'
                   : status === 'warning'
@@ -472,17 +472,17 @@ function SpeedEntryRow({ row, onInputChange, onBlur, onNotesChange }: RowProps) 
               ].join(' ')}
             />
             {status === 'invalid' && (
-              <p className="mt-1 text-[11px] text-[#A83232] dark:text-[#EF8E8E]">
+              <p className="mt-1 text-[11px] text-center text-[#A83232] dark:text-[#EF8E8E]">
                 Invalid — enter time in seconds (e.g. 1.23)
               </p>
             )}
             {status === 'warning' && (
-              <p className="mt-1 text-[11px] text-[#A67520]">
+              <p className="mt-1 text-[11px] text-center text-[#A67520]">
                 Fly time outside expected range (0.8–2.5s) — check recording
               </p>
             )}
             {(status === 'valid' || status === 'warning') && computed && (
-              <p className="mt-1 text-[11px] text-[#6B7280] dark:text-[#9CA3AF]">
+              <p className="mt-1 text-[11px] text-center text-[#6B7280] dark:text-[#9CA3AF]">
                 → {displayMs(computed.mssMs)} m/s
               </p>
             )}

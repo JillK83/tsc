@@ -306,7 +306,7 @@ export function BulkEntryTable({ sessionId, athletes, existingResults }: Props) 
               </th>
               <th className="px-3 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.05em] text-[#6B7280] dark:text-[#9CA3AF] w-[16%]">
                 <span className="block">20m MST</span>
-                <span className="block text-[10px] font-normal normal-case tracking-normal text-[#9CA3AF] mt-0.5">Level.Shuttle format</span>
+                <span className="block text-center text-[10px] font-normal normal-case tracking-normal text-[#9CA3AF] mt-0.5">Level.Shuttle format</span>
               </th>
               <th className="px-3 py-3 text-right text-[11px] font-semibold uppercase tracking-[0.05em] text-[#6B7280] dark:text-[#9CA3AF] w-[13%] font-variant-numeric tabular-nums">
                 Shuttles
@@ -429,7 +429,7 @@ function EntryRow({ row, onInputChange, onBlur, onNotesChange }: RowProps) {
         </td>
 
         {/* Input */}
-        <td className="px-3 py-2">
+        <td className="px-3 py-2 text-center">
           <div>
             <input
               ref={inputRef}
@@ -454,7 +454,7 @@ function EntryRow({ row, onInputChange, onBlur, onNotesChange }: RowProps) {
               aria-label={`20m MST score for ${row.name}`}
               aria-invalid={status === 'invalid'}
               className={[
-                'w-[120px] px-3 py-1.5 text-sm text-right rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#EBF2FD] dark:focus:ring-[rgba(90,141,238,0.15)] transition-colors font-variant-numeric tabular-nums',
+                'block mx-auto w-[120px] px-3 py-1.5 text-sm text-right rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#EBF2FD] dark:focus:ring-[rgba(90,141,238,0.15)] transition-colors font-variant-numeric tabular-nums',
                 status === 'invalid'
                   ? 'border-[#A83232] bg-[#FDEAEA] dark:bg-[rgba(168,50,50,0.15)] text-[#0F1515] dark:text-[#F3F4F6] focus:border-[#A83232]'
                   : status === 'valid'
@@ -463,12 +463,12 @@ function EntryRow({ row, onInputChange, onBlur, onNotesChange }: RowProps) {
               ].join(' ')}
             />
             {status === 'invalid' && (
-              <p className="mt-1 text-[11px] text-[#A83232] dark:text-[#EF8E8E]">
+              <p className="mt-1 text-[11px] text-center text-[#A83232] dark:text-[#EF8E8E]">
                 Invalid format — enter as Level.Shuttle (e.g., 12.4)
               </p>
             )}
             {status === 'valid' && computed && (
-              <p className="mt-1 text-[11px] text-[#6B7280] dark:text-[#9CA3AF]">
+              <p className="mt-1 text-[11px] text-center text-[#6B7280] dark:text-[#9CA3AF]">
                 → Level {computed.level}, {computed.shuttleInLevel} shuttle{computed.shuttleInLevel !== 1 ? 's' : ''}, {computed.totalShuttles} total
               </p>
             )}
