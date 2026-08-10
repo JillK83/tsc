@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { getAthletes } from '@/lib/db/actions/athletes'
 import { getOnboardingStatus } from '@/lib/db/actions/onboarding'
 import { DeactivateButton } from '@/components/roster/DeactivateButton'
+import { ReactivateButton } from '@/components/roster/ReactivateButton'
 import { ThemeToggle } from '@/components/theme-toggle'
 
 export default async function RosterPage() {
@@ -103,8 +104,10 @@ export default async function RosterPage() {
                         >
                           Edit
                         </Link>
-                        {athlete.active && (
+                        {athlete.active ? (
                           <DeactivateButton athleteId={athlete.id} athleteName={athlete.name} />
+                        ) : (
+                          <ReactivateButton athleteId={athlete.id} athleteName={athlete.name} />
                         )}
                       </div>
                     </td>

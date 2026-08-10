@@ -4,7 +4,7 @@ import { auth } from '@clerk/nextjs/server'
 import { eq, and } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { setSchoolContext } from '@/lib/db/with-school'
-import { athletes, programs, users, masResults, speedResults } from '@/lib/db/schema'
+import { athletes, programs, users } from '@/lib/db/schema'
 
 type AthleteInput = {
   name: string
@@ -107,44 +107,17 @@ export async function deactivateAthlete(athleteId: string) {
   return updated
 }
 
-export async function deleteAthleteIfNoResults(athleteId: string) {
+export async function reactivateAthlete(athleteId: string) {
   const user = await getDbUser()
 
-  const hasMas = await db
-    .select({ id: masResults.id })
-    .from(masResults)
-    .where(
-      and(
-        eq(masResults.athleteId, athleteId),
-        eq(masResults.schoolId, user.schoolId)
-      )
-    )
-    .limit(1)
-
-  const hasSpeed = await db
-    .select({ id: speedResults.id })
-    .from(speedResults)
-    .where(
-      and(
-        eq(speedResults.athleteId, athleteId),
-        eq(speedResults.schoolId, user.schoolId)
-      )
-    )
-    .limit(1)
-
-  if (hasMas.length > 0 || hasSpeed.length > 0) {
-    throw new Error(
-      'Cannot delete athlete with existing results — deactivate instead'
-    )
-  }
-
-  const [deleted] = await db
-    .delete(athletes)
+  const [updated] = await db
+    .update(athletes)
+    .set({ active: true })
     .where(
       and(eq(athletes.id, athleteId), eq(athletes.schoolId, user.schoolId))
     )
     .returning()
-  return deleted
+  return updated
 }
 
 export async function getAthletes(includeInactive = false) {

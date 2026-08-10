@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import {
   createAthlete,
   updateAthlete,
-  deleteAthleteIfNoResults,
   checkDuplicateName,
 } from '@/lib/db/actions/athletes'
 
@@ -31,8 +30,6 @@ const LABEL_CLASS =
 export function AthleteForm({ mode, initial, athleteId }: Props) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
-  const [isDeleting, startDeleteTransition] = useTransition()
-  const [deleteError, setDeleteError] = useState('')
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [dupWarning, setDupWarning] = useState(false)
   const [form, setForm] = useState<Initial>(
@@ -79,25 +76,6 @@ export function AthleteForm({ mode, initial, athleteId }: Props) {
       }
       router.push('/dashboard/roster')
       router.refresh()
-    })
-  }
-
-  function handleDelete() {
-    if (
-      !window.confirm(
-        `Permanently delete ${form.name}? This cannot be undone. Athletes with existing results cannot be deleted.`
-      )
-    )
-      return
-    setDeleteError('')
-    startDeleteTransition(async () => {
-      try {
-        await deleteAthleteIfNoResults(athleteId!)
-        router.push('/dashboard/roster')
-        router.refresh()
-      } catch (err) {
-        setDeleteError(err instanceof Error ? err.message : 'Delete failed')
-      }
     })
   }
 
@@ -181,23 +159,8 @@ export function AthleteForm({ mode, initial, athleteId }: Props) {
         />
       </div>
 
-      <div className="flex items-center justify-between pt-2 border-t border-[#E6E2DE] dark:border-[#30353A]">
-        {mode === 'edit' && (
-          <div>
-            <button
-              type="button"
-              onClick={handleDelete}
-              disabled={isDeleting}
-              className="text-xs text-[#A83232] dark:text-[#EF8E8E] hover:underline focus:outline-none focus-visible:underline disabled:opacity-40"
-            >
-              {isDeleting ? 'Deleting…' : 'Delete athlete'}
-            </button>
-            {deleteError && (
-              <p className="mt-1 text-xs text-[#A83232] dark:text-[#EF8E8E]">{deleteError}</p>
-            )}
-          </div>
-        )}
-        <div className={mode === 'create' ? 'ml-auto' : ''}>
+      <div className="flex items-center justify-end pt-2 border-t border-[#E6E2DE] dark:border-[#30353A]">
+        <div>
           <button
             type="button"
             onClick={handleSubmit}
