@@ -1,10 +1,10 @@
 'use server'
 
 import { auth } from '@clerk/nextjs/server'
-import { eq, and, desc } from 'drizzle-orm'
+import { eq, and, desc, count, inArray } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { setSchoolContext } from '@/lib/db/with-school'
-import { testSessions, users, programs } from '@/lib/db/schema'
+import { testSessions, users, programs, masResults, speedResults } from '@/lib/db/schema'
 
 type SessionInput = {
   date: string
@@ -91,4 +91,65 @@ export async function listSessions() {
     .from(testSessions)
     .where(eq(testSessions.schoolId, user.schoolId))
     .orderBy(desc(testSessions.date), desc(testSessions.createdAt))
+}
+
+export async function getSessionsWithResults(sessionIds: string[]): Promise<Set<string>> {
+  if (sessionIds.length === 0) return new Set()
+  const user = await getDbUser()
+
+  const [masRows, speedRows] = await Promise.all([
+    db
+      .selectDistinct({ sessionId: masResults.sessionId })
+      .from(masResults)
+      .where(
+        and(
+          inArray(masResults.sessionId, sessionIds),
+          eq(masResults.schoolId, user.schoolId)
+        )
+      ),
+    db
+      .selectDistinct({ sessionId: speedResults.sessionId })
+      .from(speedResults)
+      .where(
+        and(
+          inArray(speedResults.sessionId, sessionIds),
+          eq(speedResults.schoolId, user.schoolId)
+        )
+      ),
+  ])
+
+  return new Set([
+    ...masRows.map((r) => r.sessionId),
+    ...speedRows.map((r) => r.sessionId),
+  ])
+}
+
+export async function deleteSession(sessionId: string): Promise<void> {
+  const user = await getDbUser()
+  if (user.role === 'director') throw new Error('Directors cannot delete sessions')
+
+  const [[masCheck], [speedCheck]] = await Promise.all([
+    db
+      .select({ n: count() })
+      .from(masResults)
+      .where(
+        and(eq(masResults.sessionId, sessionId), eq(masResults.schoolId, user.schoolId))
+      ),
+    db
+      .select({ n: count() })
+      .from(speedResults)
+      .where(
+        and(eq(speedResults.sessionId, sessionId), eq(speedResults.schoolId, user.schoolId))
+      ),
+  ])
+
+  if ((masCheck?.n ?? 0) + (speedCheck?.n ?? 0) > 0) {
+    throw new Error('Cannot delete session with saved results')
+  }
+
+  await db
+    .delete(testSessions)
+    .where(
+      and(eq(testSessions.id, sessionId), eq(testSessions.schoolId, user.schoolId))
+    )
 }

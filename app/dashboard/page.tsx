@@ -2,9 +2,10 @@ import { currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getOnboardingStatus } from '@/lib/db/actions/onboarding'
-import { listSessions } from '@/lib/db/actions/sessions'
+import { listSessions, getSessionsWithResults } from '@/lib/db/actions/sessions'
 import { getProgram } from '@/lib/db/actions/programs'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { DeleteSessionButton } from '@/components/session/DeleteSessionButton'
 
 function formatDate(iso: string) {
   return new Date(iso + 'T00:00:00').toLocaleDateString('en-US', {
@@ -38,6 +39,9 @@ export default async function DashboardPage() {
   if (!status?.completed) redirect('/onboarding/1')
 
   const [program, sessions] = await Promise.all([getProgram(), listSessions()])
+  const sessionResultSet = sessions.length > 0
+    ? await getSessionsWithResults(sessions.map((s) => s.id))
+    : new Set<string>()
 
   return (
     <div className="min-h-screen bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-10">
@@ -121,16 +125,22 @@ export default async function DashboardPage() {
                       {s.conditions || '—'}
                     </td>
                     <td className="px-6 py-3 text-right">
-                      <Link
-                        href={
-                          s.testType === '20M_MST'
-                            ? `/dashboard/session/${s.id}/mas-entry`
-                            : `/dashboard/session/${s.id}/speed-entry`
-                        }
-                        className="text-xs text-[#4A83D8] dark:text-[#5A8DEE] hover:underline focus:outline-none focus-visible:underline"
-                      >
-                        Open →
-                      </Link>
+                      <div className="flex items-center justify-end gap-4">
+                        <DeleteSessionButton
+                          sessionId={s.id}
+                          hasResults={sessionResultSet.has(s.id)}
+                        />
+                        <Link
+                          href={
+                            s.testType === '20M_MST'
+                              ? `/dashboard/session/${s.id}/mas-entry`
+                              : `/dashboard/session/${s.id}/speed-entry`
+                          }
+                          className="text-xs text-[#4A83D8] dark:text-[#5A8DEE] hover:underline focus:outline-none focus-visible:underline"
+                        >
+                          Open →
+                        </Link>
+                      </div>
                     </td>
                   </tr>
                 ))}

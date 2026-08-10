@@ -200,6 +200,15 @@
 
 ---
 
+## Session deletion policy
+**Date:** August 2026
+**Decision:** Sessions with no saved results can be deleted by the GA from the dashboard. Sessions with existing mas_results or speed_results cannot be deleted — deactivate-only pattern mirrors the athlete policy.
+**Rationale:** GAs need a way to clean up sessions created with wrong dates or test types. Hard-deleting a session with results would orphan or cascade-delete athlete data, violating the data preservation principle. Empty sessions have no downstream impact so deletion is safe.
+**UI:** Delete link per session row on dashboard. Disabled with tooltip if results exist. Confirm dialog before delete.
+**Safety net:** `deleteSession` server action re-checks for results before executing, even when the UI shows the delete as available.
+
+---
+
 ## Open decisions — resolve before building those components
 
 - [ ] Product name — finalize before public beta
