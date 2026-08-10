@@ -134,7 +134,7 @@ export const speedResults = pgTable('speed_results', {
   flyDistanceM: real('fly_distance_m').notNull().default(10.0),
   flyTimeS: real('fly_time_s').notNull(),
   mssMs: real('mss_ms').notNull(),
-  asrMs: real('asr_ms').notNull(),
+  asrMs: real('asr_ms'),
   notes: text('notes'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })

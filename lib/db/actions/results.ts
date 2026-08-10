@@ -36,6 +36,7 @@ export async function saveMasResults(
 ) {
   if (results.length === 0) return []
   const user = await getDbUser()
+  if (user.role === 'director') throw new Error('Directors cannot write results')
 
   // Delete existing results for these athletes in this session, then re-insert.
   // Simpler than a true upsert given Drizzle's current onConflict API.
