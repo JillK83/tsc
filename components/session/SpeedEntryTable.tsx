@@ -461,7 +461,7 @@ function SpeedEntryRow({ row, onInputChange, onBlur, onNotesChange }: RowProps) 
               aria-label={`10m fly time for ${row.name}`}
               aria-invalid={status === 'invalid'}
               className={[
-                'block mx-auto w-[120px] px-3 py-1.5 text-sm text-right rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#EBF2FD] dark:focus:ring-[rgba(90,141,238,0.15)] transition-colors font-variant-numeric tabular-nums',
+                'block mx-auto w-[108px] px-3 py-1.5 text-sm text-right rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#EBF2FD] dark:focus:ring-[rgba(90,141,238,0.15)] transition-colors font-variant-numeric tabular-nums',
                 status === 'invalid'
                   ? 'border-[#A83232] bg-[#FDEAEA] dark:bg-[rgba(168,50,50,0.15)] text-[#0F1515] dark:text-[#F3F4F6] focus:border-[#A83232]'
                   : status === 'warning'
@@ -474,11 +474,6 @@ function SpeedEntryRow({ row, onInputChange, onBlur, onNotesChange }: RowProps) 
             {status === 'invalid' && (
               <p className="mt-1 text-[11px] text-center text-[#A83232] dark:text-[#EF8E8E]">
                 Invalid — enter time in seconds (e.g. 1.23)
-              </p>
-            )}
-            {status === 'warning' && (
-              <p className="mt-1 text-[11px] text-center text-[#A67520]">
-                Fly time outside expected range (0.8–2.5s) — check recording
               </p>
             )}
             {(status === 'valid' || status === 'warning') && computed && (
@@ -533,10 +528,12 @@ function SpeedEntryRow({ row, onInputChange, onBlur, onNotesChange }: RowProps) 
               <path d="M3 8l3.5 3.5L13 4.5" stroke="#1E6E4C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           ) : status === 'warning' ? (
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-label="Out of range" role="img">
-              <circle cx="8" cy="8" r="6.5" stroke="#C98E24" strokeWidth="1.5" />
-              <path d="M8 5v3.5M8 10.5v.5" stroke="#C98E24" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
+            <span title="Fly time outside expected range (0.8–2.5s) — check recording">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-label="Out of range" role="img">
+                <circle cx="8" cy="8" r="6.5" stroke="#C98E24" strokeWidth="1.5" />
+                <path d="M8 5v3.5M8 10.5v.5" stroke="#C98E24" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </span>
           ) : status === 'invalid' ? (
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-label="Invalid" role="img">
               <circle cx="8" cy="8" r="6.5" stroke="#A83232" strokeWidth="1.5" />

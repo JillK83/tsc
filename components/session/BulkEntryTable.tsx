@@ -454,7 +454,7 @@ function EntryRow({ row, onInputChange, onBlur, onNotesChange }: RowProps) {
               aria-label={`20m MST score for ${row.name}`}
               aria-invalid={status === 'invalid'}
               className={[
-                'block mx-auto w-[120px] px-3 py-1.5 text-sm text-right rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#EBF2FD] dark:focus:ring-[rgba(90,141,238,0.15)] transition-colors font-variant-numeric tabular-nums',
+                'block mx-auto w-[108px] px-3 py-1.5 text-sm text-right rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#EBF2FD] dark:focus:ring-[rgba(90,141,238,0.15)] transition-colors font-variant-numeric tabular-nums',
                 status === 'invalid'
                   ? 'border-[#A83232] bg-[#FDEAEA] dark:bg-[rgba(168,50,50,0.15)] text-[#0F1515] dark:text-[#F3F4F6] focus:border-[#A83232]'
                   : status === 'valid'
