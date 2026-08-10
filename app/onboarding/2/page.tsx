@@ -53,10 +53,13 @@ export default function RosterPage() {
         const errs: ParseError[] = []
 
         results.data.forEach((raw, i) => {
-          const name = (raw['name'] || raw['Name'] || '').trim()
-          const position = (raw['position'] || raw['Position'] || '').trim()
-          const sexRaw = (raw['sex'] || raw['Sex'] || '').trim().toLowerCase()
-          const birthDate = (raw['birth_date'] || raw['birthDate'] || raw['Birth Date'] || '').trim()
+          const norm: Record<string, string> = {}
+          for (const [k, v] of Object.entries(raw)) norm[k.trim().toLowerCase()] = v
+
+          const name = (norm['name'] ?? '').trim()
+          const position = (norm['position'] ?? '').trim()
+          const sexRaw = (norm['sex'] ?? '').trim().toLowerCase()
+          const birthDate = (norm['birth_date'] ?? norm['birthdate'] ?? norm['birth date'] ?? '').trim()
 
           if (!name) {
             errs.push({ row: i + 2, message: `Row ${i + 2}: name is required` })
@@ -130,7 +133,7 @@ export default function RosterPage() {
   }
 
   return (
-    <OnboardingCard>
+    <OnboardingCard maxWidth="720px">
       <StepIndicator current={2} />
 
       <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-[#6B7280] dark:text-[#9CA3AF] mb-1">
@@ -203,6 +206,9 @@ export default function RosterPage() {
               if (file) parseFile(file)
             }}
           />
+          <p className="mt-2 text-[12px] text-[#6B7280] dark:text-[#9CA3AF]">
+            Accepts .csv files only. In Google Sheets: File → Download → Comma-separated values (.csv)
+          </p>
 
           {/* Parse errors */}
           {csvErrors.length > 0 && (
@@ -268,7 +274,7 @@ export default function RosterPage() {
           {/* Manual entry rows */}
           <div className="space-y-3">
             {manualAthletes.map((row, idx) => (
-              <div key={row.id} className="grid grid-cols-[1fr_1fr_auto_auto_auto] gap-2 items-end">
+              <div key={row.id} className="grid grid-cols-[2fr_1.5fr_1fr_1.5fr_24px] gap-3 items-end">
                 <div>
                   {idx === 0 && (
                     <label className="block text-[11px] font-semibold uppercase tracking-[0.06em] text-[#6B7280] dark:text-[#9CA3AF] mb-1.5">
@@ -327,7 +333,7 @@ export default function RosterPage() {
                     value={row.birthDate}
                     onChange={(e) => updateManualRow(row.id, 'birthDate', e.target.value)}
                     aria-label="Birth date (optional)"
-                    className="px-3 py-2 text-sm rounded-lg border border-[#D9D3CC] dark:border-[#383C40] bg-[#FFFFFF] dark:bg-[#262A2F] text-[#0F1515] dark:text-[#F3F4F6] focus:outline-none focus:border-[#4A83D8] dark:focus:border-[#5A8DEE] focus:ring-2 focus:ring-[#EBF2FD] dark:focus:ring-[rgba(90,141,238,0.15)]"
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-[#D9D3CC] dark:border-[#383C40] bg-[#FFFFFF] dark:bg-[#262A2F] text-[#0F1515] dark:text-[#F3F4F6] focus:outline-none focus:border-[#4A83D8] dark:focus:border-[#5A8DEE] focus:ring-2 focus:ring-[#EBF2FD] dark:focus:ring-[rgba(90,141,238,0.15)]"
                   />
                 </div>
                 <div className={idx === 0 ? 'mt-6' : ''}>
