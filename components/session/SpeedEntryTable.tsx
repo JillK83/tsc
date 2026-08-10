@@ -395,6 +395,7 @@ type RowProps = {
 
 function SpeedEntryRow({ row, onInputChange, onBlur, onNotesChange }: RowProps) {
   const [notesOpen, setNotesOpen] = useState(false)
+  const [warningOpen, setWarningOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const { status, computed } = row
 
@@ -497,10 +498,8 @@ function SpeedEntryRow({ row, onInputChange, onBlur, onNotesChange }: RowProps) 
         <td className="px-3 py-3 text-right text-[13px] font-bold font-variant-numeric tabular-nums text-[#0F1515] dark:text-[#F3F4F6]">
           {row.masMs === null ? (
             <span className="font-normal text-[#9CA3AF] text-[11px]">No MAS</span>
-          ) : computed?.asrMs != null ? (
-            computed.asrMs < 0
-              ? <span className="text-[#A67520]">{displayMs(computed.asrMs)}</span>
-              : displayMs(computed.asrMs)
+          ) : computed?.asrMs != null && computed.asrMs >= 0 ? (
+            displayMs(computed.asrMs)
           ) : (
             <span className="font-normal text-[#9CA3AF]">—</span>
           )}
@@ -522,26 +521,41 @@ function SpeedEntryRow({ row, onInputChange, onBlur, onNotesChange }: RowProps) 
         </td>
 
         {/* Status icon */}
-        <td className="px-3 py-3 text-center">
-          {status === 'valid' ? (
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-label="Valid" role="img">
-              <path d="M3 8l3.5 3.5L13 4.5" stroke="#1E6E4C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          ) : status === 'warning' ? (
-            <span title="Fly time outside expected range (0.8–2.5s) — check recording">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-label="Out of range" role="img">
-                <circle cx="8" cy="8" r="6.5" stroke="#C98E24" strokeWidth="1.5" />
-                <path d="M8 5v3.5M8 10.5v.5" stroke="#C98E24" strokeWidth="1.5" strokeLinecap="round" />
+        <td className="px-3 py-3">
+          <div className="flex flex-col items-center justify-center gap-1">
+            {status === 'valid' ? (
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-label="Valid" role="img">
+                <path d="M3 8l3.5 3.5L13 4.5" stroke="#1E6E4C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-            </span>
-          ) : status === 'invalid' ? (
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-label="Invalid" role="img">
-              <circle cx="8" cy="8" r="6.5" stroke="#A83232" strokeWidth="1.5" />
-              <path d="M8 5v3.5M8 10.5v.5" stroke="#A83232" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
-          ) : (
-            <span className="text-[#9CA3AF] text-[13px]" aria-label="Pending">—</span>
-          )}
+            ) : status === 'warning' ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setWarningOpen((v) => !v)}
+                  aria-label={warningOpen ? 'Hide warning detail' : 'Show warning detail'}
+                  aria-expanded={warningOpen}
+                  className="focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8] rounded"
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <circle cx="8" cy="8" r="6.5" stroke="#C98E24" strokeWidth="1.5" />
+                    <path d="M8 5v3.5M8 10.5v.5" stroke="#C98E24" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                </button>
+                {warningOpen && (
+                  <p className="text-[10px] text-center text-[#A67520] leading-tight">
+                    Fly time outside expected range (0.8–2.5s) — check recording
+                  </p>
+                )}
+              </>
+            ) : status === 'invalid' ? (
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-label="Invalid" role="img">
+                <circle cx="8" cy="8" r="6.5" stroke="#A83232" strokeWidth="1.5" />
+                <path d="M8 5v3.5M8 10.5v.5" stroke="#A83232" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            ) : (
+              <span className="text-[#9CA3AF] text-[13px]" aria-label="Pending">—</span>
+            )}
+          </div>
         </td>
       </tr>
 
