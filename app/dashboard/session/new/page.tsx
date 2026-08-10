@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createSession } from '@/lib/db/actions/sessions'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 type TestType = '20M_MST' | 'speed'
 
@@ -46,7 +47,8 @@ export default function NewSessionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-10">
+    <div className="min-h-screen bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-10 relative">
+      <div className="absolute top-4 right-4"><ThemeToggle /></div>
       <div className="max-w-lg mx-auto">
         <Link
           href="/dashboard"

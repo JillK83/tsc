@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { getOnboardingStatus } from '@/lib/db/actions/onboarding'
 import { listSessions } from '@/lib/db/actions/sessions'
 import { getProgram } from '@/lib/db/actions/programs'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 function formatDate(iso: string) {
   return new Date(iso + 'T00:00:00').toLocaleDateString('en-US', {
@@ -54,6 +55,7 @@ export default async function DashboardPage() {
             </h1>
           </div>
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <Link
               href="/dashboard/roster"
               className="px-4 py-2 rounded-xl border-2 border-[#4A83D8] dark:border-[#5A8DEE] text-[#4A83D8] dark:text-[#5A8DEE] text-sm font-semibold hover:bg-[#EBF2FD] dark:hover:bg-[rgba(90,141,238,0.15)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]"

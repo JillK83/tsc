@@ -10,6 +10,7 @@ import {
 import { useRouter } from 'next/navigation'
 import { parseLevelShuttle, computeMasResult, displayMs } from '@/lib/formulas/mas'
 import { saveMasResults } from '@/lib/db/actions/results'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 type Athlete = {
   id: string
@@ -91,7 +92,9 @@ export function BulkEntryTable({ sessionId, athletes, existingResults }: Props) 
   const [isPending, startTransition] = useTransition()
   const [isSaving, setIsSaving] = useState(false)
   const [savedToast, setSavedToast] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
+  const [showLeaveModal, setShowLeaveModal] = useState(false)
 
   const existingMap = Object.fromEntries(
     existingResults.map((r) => [r.athleteId, r])
@@ -170,19 +173,25 @@ export function BulkEntryTable({ sessionId, athletes, existingResults }: Props) 
     })
 
     startTransition(async () => {
-      await saveMasResults(sessionId, toSave)
-      // Mark all saved rows as persisted
-      setRows((prev) =>
-        prev.map((r) =>
-          r.status === 'valid' ? { ...r, savedInput: r.input } : r
+      try {
+        setSaveError(null)
+        await saveMasResults(sessionId, toSave)
+        setRows((prev) =>
+          prev.map((r) =>
+            r.status === 'valid' ? { ...r, savedInput: r.input } : r
+          )
         )
-      )
-      setIsSaving(false)
-      if (finalize) {
-        setSavedToast(true)
-        setTimeout(() => {
-          router.push('/dashboard')
-        }, 1800)
+        if (finalize) {
+          setSavedToast(true)
+          setTimeout(() => {
+            router.push('/dashboard')
+          }, 1800)
+        }
+      } catch (err) {
+        console.error('Save failed:', err)
+        setSaveError('Save failed. Check your connection and try again.')
+      } finally {
+        setIsSaving(false)
       }
     })
   }
@@ -196,6 +205,44 @@ export function BulkEntryTable({ sessionId, athletes, existingResults }: Props) 
 
   return (
     <div className="flex flex-col flex-1 min-h-0">
+      {/* Leave confirmation modal */}
+      {showLeaveModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="leave-modal-heading"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+        >
+          <div className="bg-[#FFFFFF] dark:bg-[#262A2F] rounded-2xl border border-[#D9D3CC] dark:border-[#383C40] p-6 shadow-lg w-full max-w-sm mx-4">
+            <h2
+              id="leave-modal-heading"
+              className="text-base font-bold text-[#0F1515] dark:text-[#F3F4F6]"
+            >
+              Unsaved changes
+            </h2>
+            <p className="mt-2 text-sm text-[#6B7280] dark:text-[#9CA3AF]">
+              You have unsaved entries. Leave without saving?
+            </p>
+            <div className="flex items-center justify-end gap-3 mt-6">
+              <button
+                type="button"
+                onClick={() => setShowLeaveModal(false)}
+                className="inline-flex items-center px-4 py-2 rounded-xl border-2 border-[#4A83D8] dark:border-[#5A8DEE] text-[#4A83D8] dark:text-[#5A8DEE] text-sm font-semibold hover:bg-[#EBF2FD] dark:hover:bg-[rgba(90,141,238,0.15)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]"
+              >
+                Stay
+              </button>
+              <button
+                type="button"
+                onClick={() => router.push('/dashboard')}
+                className="inline-flex items-center px-4 py-2 rounded-xl bg-[#4A83D8] dark:bg-[#5A8DEE] text-white text-sm font-semibold hover:bg-[#2E65BE] dark:hover:bg-[#4A83D8] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]"
+              >
+                Leave
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Saved toast */}
       {savedToast && (
         <div
@@ -217,8 +264,8 @@ export function BulkEntryTable({ sessionId, athletes, existingResults }: Props) 
             Enter individual results for the team
           </p>
         </div>
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-[#6B7280] dark:text-[#9CA3AF]">
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-[#6B7280] dark:text-[#9CA3AF] mr-2">
             <span className="font-semibold text-[#0F1515] dark:text-[#F3F4F6]">
               {validCount}
             </span>{' '}
@@ -242,34 +289,36 @@ export function BulkEntryTable({ sessionId, athletes, existingResults }: Props) 
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search athletes…"
               aria-label="Search athletes"
-              className="pl-8 pr-3 py-1.5 text-sm rounded-lg border border-[#D9D3CC] dark:border-[#383C40] bg-[#FAFAF8] dark:bg-[#2D3338] text-[#0F1515] dark:text-[#F3F4F6] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#4A83D8] dark:focus:border-[#5A8DEE] focus:ring-2 focus:ring-[#EBF2FD] dark:focus:ring-[rgba(90,141,238,0.15)] w-44"
+              className="pl-8 pr-3 py-1.5 text-sm rounded-lg border border-[#D9D3CC] dark:border-[#383C40] bg-[#FAFAF8] dark:bg-[#2D3338] text-[#0F1515] dark:text-[#F3F4F6] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#4A83D8] dark:focus:border-[#5A8DEE] focus:ring-2 focus:ring-[#EBF2FD] dark:focus:ring-[rgba(90,141,238,0.15)] w-[200px]"
             />
           </div>
+          <ThemeToggle />
         </div>
       </div>
 
       {/* Table */}
       <div className="flex-1 overflow-y-auto">
-        <table className="w-full">
+        <table className="w-full table-fixed">
           <thead className="sticky top-0 bg-[#FFFFFF] dark:bg-[#262A2F] z-10">
             <tr className="border-b border-[#D9D3CC] dark:border-[#383C40]">
-              <th className="px-6 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.05em] text-[#6B7280] dark:text-[#9CA3AF] w-56">
+              <th className="px-6 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.05em] text-[#6B7280] dark:text-[#9CA3AF] w-[30%]">
                 Athlete
               </th>
-              <th className="px-3 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.05em] text-[#6B7280] dark:text-[#9CA3AF] w-36">
-                20m MST
+              <th className="px-3 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.05em] text-[#6B7280] dark:text-[#9CA3AF] w-[16%]">
+                <span className="block">20m MST</span>
+                <span className="block text-[10px] font-normal normal-case tracking-normal text-[#9CA3AF] mt-0.5">Level.Shuttle format</span>
               </th>
-              <th className="px-3 py-3 text-right text-[11px] font-semibold uppercase tracking-[0.05em] text-[#6B7280] dark:text-[#9CA3AF] w-24 font-variant-numeric tabular-nums">
+              <th className="px-3 py-3 text-right text-[11px] font-semibold uppercase tracking-[0.05em] text-[#6B7280] dark:text-[#9CA3AF] w-[13%] font-variant-numeric tabular-nums">
                 Shuttles
               </th>
-              <th className="px-3 py-3 text-right text-[11px] font-semibold uppercase tracking-[0.05em] text-[#6B7280] dark:text-[#9CA3AF] w-32">
+              <th className="px-3 py-3 text-right text-[11px] font-semibold uppercase tracking-[0.05em] text-[#6B7280] dark:text-[#9CA3AF] w-[14%]">
                 Est. VO2max
               </th>
-              <th className="px-3 py-3 text-right text-[11px] font-semibold uppercase tracking-[0.05em] text-[#6B7280] dark:text-[#9CA3AF] w-24">
+              <th className="px-3 py-3 text-right text-[11px] font-semibold uppercase tracking-[0.05em] text-[#6B7280] dark:text-[#9CA3AF] w-[13%]">
                 MAS (m/s)
               </th>
-              <th className="px-3 py-3 w-8" aria-label="Notes" />
-              <th className="px-3 py-3 w-8" aria-label="Status" />
+              <th className="px-3 py-3 w-[7%]" aria-label="Notes" />
+              <th className="px-3 py-3 w-[7%]" aria-label="Status" />
             </tr>
           </thead>
           <tbody>
@@ -286,11 +335,24 @@ export function BulkEntryTable({ sessionId, athletes, existingResults }: Props) 
         </table>
       </div>
 
+      {/* Save error banner */}
+      {saveError && (
+        <div
+          role="alert"
+          className="px-6 py-2.5 bg-[#FDEAEA] dark:bg-[rgba(168,50,50,0.15)] border-t border-[#A83232] dark:border-[#EF8E8E] text-sm text-[#A83232] dark:text-[#EF8E8E]"
+        >
+          {saveError}
+        </div>
+      )}
+
       {/* Bottom bar */}
       <div className="flex items-center justify-between px-6 py-4 border-t border-[#D9D3CC] dark:border-[#383C40] bg-[#FFFFFF] dark:bg-[#262A2F]">
         <button
           type="button"
-          onClick={() => router.push('/dashboard')}
+          onClick={() => {
+            if (hasUnsavedChanges) { setShowLeaveModal(true); return }
+            router.push('/dashboard')
+          }}
           className="inline-flex items-center gap-1.5 text-sm text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#0F1515] dark:hover:text-[#F3F4F6] transition-colors focus:outline-none focus-visible:underline"
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -388,11 +450,11 @@ function EntryRow({ row, onInputChange, onBlur, onNotesChange }: RowProps) {
                   inputs[idx + 1]?.focus()
                 }
               }}
-              placeholder="Level.Shuttle"
+              placeholder="e.g. 12.4"
               aria-label={`20m MST score for ${row.name}`}
               aria-invalid={status === 'invalid'}
               className={[
-                'w-full px-3 py-1.5 text-sm text-right rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#EBF2FD] dark:focus:ring-[rgba(90,141,238,0.15)] transition-colors font-variant-numeric tabular-nums',
+                'w-[120px] px-3 py-1.5 text-sm text-right rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#EBF2FD] dark:focus:ring-[rgba(90,141,238,0.15)] transition-colors font-variant-numeric tabular-nums',
                 status === 'invalid'
                   ? 'border-[#A83232] bg-[#FDEAEA] dark:bg-[rgba(168,50,50,0.15)] text-[#0F1515] dark:text-[#F3F4F6] focus:border-[#A83232]'
                   : status === 'valid'
@@ -432,12 +494,13 @@ function EntryRow({ row, onInputChange, onBlur, onNotesChange }: RowProps) {
         <td className="px-3 py-3 text-center">
           <button
             type="button"
+            title="Add note"
             onClick={() => setNotesOpen((v) => !v)}
             aria-label={`${notesOpen ? 'Close' : 'Open'} notes for ${row.name}`}
             className="text-[#9CA3AF] hover:text-[#6B7280] dark:hover:text-[#9CA3AF] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8] rounded"
           >
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-              <path d="M2 4h10M2 7h7M2 10h5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+              <path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
         </td>

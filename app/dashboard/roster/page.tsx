@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { getAthletes } from '@/lib/db/actions/athletes'
 import { getOnboardingStatus } from '@/lib/db/actions/onboarding'
 import { DeactivateButton } from '@/components/roster/DeactivateButton'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 export default async function RosterPage() {
   const { userId } = await auth()
@@ -28,6 +29,7 @@ export default async function RosterPage() {
             <h1 className="text-2xl font-bold text-[#0F1515] dark:text-[#F3F4F6]">Roster</h1>
           </div>
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <Link
               href="/dashboard/roster/new"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#4A83D8] dark:bg-[#5A8DEE] text-white text-sm font-semibold hover:bg-[#2E65BE] dark:hover:bg-[#4A83D8] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]"

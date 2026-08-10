@@ -6,6 +6,7 @@ import { db } from '@/lib/db'
 import { athletes, users } from '@/lib/db/schema'
 import { getOnboardingStatus } from '@/lib/db/actions/onboarding'
 import { AthleteForm } from '@/components/roster/AthleteForm'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 type Props = {
   params: Promise<{ id: string }>
@@ -35,7 +36,8 @@ export default async function EditAthletePage({ params }: Props) {
   if (!athlete) notFound()
 
   return (
-    <div className="min-h-screen bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-10">
+    <div className="min-h-screen bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-10 relative">
+      <div className="absolute top-4 right-4"><ThemeToggle /></div>
       <div className="max-w-lg mx-auto">
         <Link
           href="/dashboard/roster"

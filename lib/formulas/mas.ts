@@ -33,8 +33,9 @@ export type MasResult = {
  */
 export function parseLevelShuttle(input: string): ParsedLevelShuttle | null {
   const trimmed = input.trim()
-  // Must match integer.singleDigit — e.g. "12.4", "10.2"
-  const match = trimmed.match(/^(\d{1,2})\.(\d)$/)
+  // Accept "12.4" or bare integer "11" (treated as "11.0" — 0 shuttles into the level)
+  const normalized = trimmed.includes('.') ? trimmed : `${trimmed}.0`
+  const match = normalized.match(/^(\d{1,2})\.(\d)$/)
   if (!match) return null
 
   const level = parseInt(match[1], 10)
