@@ -44,7 +44,7 @@ export default async function DashboardPage() {
     : new Set<string>()
 
   return (
-    <div className="min-h-screen bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-10">
+    <div className="min-h-screen bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-12">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex items-start justify-between mb-8">
@@ -115,13 +115,13 @@ export default async function DashboardPage() {
                     key={s.id}
                     className="border-b last:border-0 border-[#E6E2DE] dark:border-[#30353A] hover:bg-[#FAFAF8] dark:hover:bg-[#2D3338] transition-colors"
                   >
-                    <td className="px-6 py-3 text-[13px] font-semibold text-[#0F1515] dark:text-[#F3F4F6] tabular-nums">
+                    <td className="px-6 py-3 text-sm font-semibold text-[#0F1515] dark:text-[#F3F4F6] tabular-nums">
                       {formatDate(s.date)}
                     </td>
-                    <td className="px-6 py-3 text-[13px] text-[#6B7280] dark:text-[#9CA3AF]">
+                    <td className="px-6 py-3 text-sm text-[#6B7280] dark:text-[#9CA3AF]">
                       {TEST_TYPE_LABELS[s.testType] ?? s.testType}
                     </td>
-                    <td className="px-6 py-3 text-[13px] text-[#6B7280] dark:text-[#9CA3AF]">
+                    <td className="px-6 py-3 text-sm text-[#6B7280] dark:text-[#9CA3AF]">
                       {s.conditions || '—'}
                     </td>
                     <td className="px-6 py-3 text-right">
@@ -136,7 +136,7 @@ export default async function DashboardPage() {
                               ? `/dashboard/session/${s.id}/mas-entry`
                               : `/dashboard/session/${s.id}/speed-entry`
                           }
-                          className="text-xs text-[#4A83D8] dark:text-[#5A8DEE] hover:underline focus:outline-none focus-visible:underline"
+                          className="text-sm text-[#4A83D8] dark:text-[#5A8DEE] hover:underline focus:outline-none focus-visible:underline"
                         >
                           Open →
                         </Link>

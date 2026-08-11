@@ -42,9 +42,10 @@ Beta target: ~4 weeks. Beta sport: Soccer (NJ collegiate program).
 - Director account can write data
 - School A user can query School B data
 
-## Before every commit
-- Run `code-reviewer` agent before every commit
-- Run `component-audit` skill after building any UI component
+## Commit policy — MANUAL ONLY
+- NEVER auto-commit or auto-push. Do not invoke the commit-push-pr skill unless the user explicitly asks for a commit or types `/commit-push-pr`.
+- When the user does ask for a commit: run `code-reviewer` first, then proceed only if no CRITICAL findings.
+- Run `component-audit` skill after building any UI component, only when asked.
 
 ## Compact instructions
 Focus on code changes and implementation. Do not restate the PRD or formulas back to me — they are in /docs/. If something conflicts with a locked decision, flag it rather than proceeding.

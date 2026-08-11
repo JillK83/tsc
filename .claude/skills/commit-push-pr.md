@@ -1,5 +1,7 @@
 # Skill: Commit → Push → PR
 
+**MANUAL ONLY — never auto-invoke.** Only run when the user explicitly asks for a commit or types `/commit-push-pr`. Do not trigger after finishing a task, after a code-reviewer run, or on any other automatic condition.
+
 Invoke when ready to ship staged changes. Runs pre-flight checks, commits, pushes, and opens a PR.
 
 ---
