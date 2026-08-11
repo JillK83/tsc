@@ -93,6 +93,8 @@ export async function saveSpeedResults(
   if (results.length === 0) return []
   const user = await getDbUser()
 
+  if (user.role === 'director') throw new Error('Directors cannot write results')
+
   const athleteIds = results.map((r) => r.athleteId)
   await db.delete(speedResults).where(
     and(
@@ -101,8 +103,6 @@ export async function saveSpeedResults(
       inArray(speedResults.athleteId, athleteIds)
     )
   )
-
-  if (user.role === 'director') throw new Error('Directors cannot write results')
 
   const rows = results.map((r) => {
     const { mssMs, asrMs } = computeSpeedResult(r.flyTimeS, r.masMs)
