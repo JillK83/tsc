@@ -209,6 +209,15 @@
 
 ---
 
+### ASR panel row structure — one row per athlete
+**Date:** August 2026
+**Decision:** ASR panel shows one row per athlete, not grouped rows. MAS panel remains grouped.
+**Why:** ASR distance formula includes MAS as a variable — `(MAS + ASR × pct) × time`. Two athletes with identical displayed ASR but different MAS values produce materially different distances (~21m at 30s). A grouped row would show one approximate distance for both, which is inaccurate. Roger confirmed Option A: one row per athlete. Accuracy over compactness.
+**Row layout:** Displayed ASR value ("4.0", no unit) as muted sub-label above athlete name. Sort by ASR descending using full stored precision.
+**Alternatives rejected:** Grouped by displayed ASR (Option B) — misleading when MAS differs within the group.
+
+---
+
 ## Open decisions — resolve before building those components
 
 - [ ] Product name — finalize before public beta

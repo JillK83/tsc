@@ -29,13 +29,12 @@ export type MasResult = {
 
 /**
  * Parses "Level.Shuttle" input string (e.g. "12.4") into components.
+ * Decimal point is required — "12" is invalid, "12.0" is valid (0 shuttles into level 12).
  * Returns null if format is invalid or level out of range.
  */
 export function parseLevelShuttle(input: string): ParsedLevelShuttle | null {
   const trimmed = input.trim()
-  // Accept "12.4" or bare integer "11" (treated as "11.0" — 0 shuttles into the level)
-  const normalized = trimmed.includes('.') ? trimmed : `${trimmed}.0`
-  const match = normalized.match(/^(\d{1,2})\.(\d)$/)
+  const match = trimmed.match(/^(\d{1,2})\.(\d)$/)
   if (!match) return null
 
   const level = parseInt(match[1], 10)
