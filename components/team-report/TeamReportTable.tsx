@@ -36,7 +36,6 @@ export function TeamReportTable({ data }: Props) {
 
   const colHeaders: { key: SortKey | null; label: string; subLabel?: string }[] = [
     { key: null, label: 'Rank' },
-    { key: null, label: 'ID' },
     { key: null, label: 'Athlete Name' },
     { key: null, label: 'POS' },
     { key: null, label: '20M MST', subLabel: 'Level.Shuttle' },
@@ -50,6 +49,22 @@ export function TeamReportTable({ data }: Props) {
 
   return (
     <div>
+      <style>{`
+        @media print {
+          .team-report-table {
+            table-layout: fixed;
+            width: 100%;
+            font-size: 10px;
+          }
+          .team-report-table th,
+          .team-report-table td {
+            padding: 4px 6px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+      `}</style>
       {/* Controls */}
       <div className="flex items-center justify-between mb-4 print:hidden">
         <div className="flex items-center gap-2">
@@ -68,7 +83,7 @@ export function TeamReportTable({ data }: Props) {
 
       {/* Table */}
       <div className="bg-white dark:bg-[#262A2F] rounded-2xl border border-[#D9D3CC] dark:border-[#383C40] overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full team-report-table">
           <thead>
             <tr className="border-b border-[#D9D3CC] dark:border-[#383C40]">
               {colHeaders.map((col) => (
@@ -113,9 +128,6 @@ export function TeamReportTable({ data }: Props) {
               >
                 <td className="px-4 py-3 text-sm font-semibold text-[#0F1515] dark:text-[#F3F4F6] tabular-nums whitespace-nowrap">
                   {athlete.teamRank !== null ? `#${athlete.teamRank}` : '—'}
-                </td>
-                <td className="px-4 py-3 text-sm text-[#6B7280] dark:text-[#9CA3AF] tabular-nums">
-                  {athlete.displayId}
                 </td>
                 <td className="px-4 py-3 text-sm font-medium">
                   <Link

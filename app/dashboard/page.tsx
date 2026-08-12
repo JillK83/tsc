@@ -139,7 +139,7 @@ export default async function DashboardPage() {
                         {s.testType === '20M_MST' && (
                           <Link
                             href={`/dashboard/session/${s.id}/report`}
-                            className="text-sm text-[#4A83D8] dark:text-[#5A8DEE] hover:underline focus:outline-none focus-visible:underline"
+                            className="px-3 py-1.5 rounded-xl bg-[#4A83D8] dark:bg-[#5A8DEE] text-white text-xs font-semibold hover:bg-[#2E65BE] dark:hover:bg-[#4A83D8] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]"
                           >
                             View Report →
                           </Link>

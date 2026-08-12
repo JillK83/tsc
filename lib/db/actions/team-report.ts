@@ -1,7 +1,7 @@
 'use server'
 
 import { auth } from '@clerk/nextjs/server'
-import { eq, and, inArray, desc, asc } from 'drizzle-orm'
+import { eq, and, inArray, desc } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { setSchoolContext } from '@/lib/db/with-school'
 import { athletes, masResults, speedResults, programs, users, testSessions } from '@/lib/db/schema'
@@ -11,7 +11,6 @@ export type TeamReportAthlete = {
   id: string
   name: string
   position: string | null
-  displayId: string
   mas: {
     level: number
     shuttleInLevel: number
@@ -106,19 +105,22 @@ export async function getTeamReport(sessionId: string): Promise<TeamReportData> 
 
   const sessionAthleteIds = sessionMasRows.map((r) => r.athleteId)
 
-  // Speed results for athletes in this session
-  const sessionSpeedRows = await db
+  // Most recent speed result per athlete (speed and MST sessions are independent)
+  const allSpeedRows = await db
     .select()
     .from(speedResults)
     .where(
       and(
-        eq(speedResults.sessionId, sessionId),
         eq(speedResults.schoolId, user.schoolId),
         inArray(speedResults.athleteId, sessionAthleteIds)
       )
     )
+    .orderBy(desc(speedResults.createdAt))
 
-  const speedByAthlete = new Map(sessionSpeedRows.map((r) => [r.athleteId, r]))
+  const speedByAthlete = new Map<string, (typeof allSpeedRows)[number]>()
+  for (const r of allSpeedRows) {
+    if (!speedByAthlete.has(r.athleteId)) speedByAthlete.set(r.athleteId, r)
+  }
 
   // Athlete names
   const athleteRows = await db
@@ -171,15 +173,6 @@ export async function getTeamReport(sessionId: string): Promise<TeamReportData> 
   const teamRankMap = computeTeamRank(rankInputs)
   const positionRankMap = computePositionRank(rankInputs)
 
-  // All athletes (active+inactive) ordered by createdAt for display IDs
-  const allAthletesOrdered = await db
-    .select({ id: athletes.id })
-    .from(athletes)
-    .where(and(eq(athletes.programId, programId), eq(athletes.schoolId, user.schoolId)))
-    .orderBy(asc(athletes.createdAt))
-
-  const positionByIndex = new Map(allAthletesOrdered.map((a, i) => [a.id, i + 1]))
-
   // Date range from masResults.createdAt for this session
   const masCreatedAts = sessionMasRows.map((r) => r.createdAt.getTime())
   const minTs = Math.min(...masCreatedAts)
@@ -200,15 +193,12 @@ export async function getTeamReport(sessionId: string): Promise<TeamReportData> 
       if (!athlete) return null
 
       const speedRow = speedByAthlete.get(masRow.athleteId)
-      const posIdx = positionByIndex.get(masRow.athleteId) ?? 0
-      const displayId = String(posIdx).padStart(5, '0')
       const positionResult = positionRankMap.get(masRow.athleteId)
 
       return {
         id: athlete.id,
         name: athlete.name,
         position: athlete.position ?? null,
-        displayId,
         mas: {
           level: masRow.level,
           shuttleInLevel: masRow.shuttleInLevel,

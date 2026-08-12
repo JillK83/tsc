@@ -226,6 +226,28 @@
 
 ---
 
+### Display ID — GA screen only
+**Date:** August 2026
+**Decision:** The zero-padded sequential Display ID (e.g. "00005") appears only on the Athlete Card screen. Removed from the Team Report table and the Athlete Card print component.
+**Why:** The ID is a GA cross-reference tool for matching paper clipboard entries to app records during a testing session. It has no meaning in the director-facing Team Report and should not appear on printed cards handed to athletes or shown in meetings.
+**Rule:** The ID derivation logic stays in both server actions — only the render layer is restricted.
+
+---
+
+### Athlete card prev/next navigation — below card, muted
+**Date:** August 2026
+**Decision:** Prev/next athlete links appear in a row directly below the athlete card (not in the top nav bar). Left-aligned for prev, right-aligned for next. Text/secondary color (`#6B7280` / `#9CA3AF`), 14px, no button border or background.
+**Why:** Placing prev/next in the same bar as "← Back to Team Report" and "Print Card" created three competing arrow directions in one strip. Separating it to below the card makes it a muted browsing affordance, not a competing primary action.
+
+---
+
+### Position rank — single-athlete group shows "1 of 1"
+**Date:** August 2026
+**Decision:** An athlete who is the only member of their position group with a MAS result receives rank "1 of 1", not "—".
+**Why:** Suppression ("—") caused confusion for Goalkeepers and other single-position athletes who had valid data. The null-rank rule ("—") applies only when zero athletes in the position group have MAS results, or when fewer than 2 athletes program-wide have MAS (team rank suppression). Position group size alone does not suppress the rank.
+
+---
+
 ### Director role enforcement — pre-pilot verification required
 **Date:** August 2026
 **Decision:** Director read-only enforcement is built at the DB action level in Phase 6. `getTeamReport` and `getAthleteCard` are read-only — no write actions are available on the team report or athlete card pages. However, end-to-end verification with an actual director-role user has not been completed. Only one user (GA/admin) exists in the system during development.

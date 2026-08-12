@@ -77,16 +77,8 @@ export default async function TeamReportPage({ params }: Props) {
             </p>
             <h1 className="text-2xl font-bold text-[#0F1515] dark:text-[#F3F4F6]">Team Report</h1>
             <p className="text-sm text-[#6B7280] dark:text-[#9CA3AF] mt-1">
-              {dateDisplay} — {seasonLabel}
+              {dateDisplay} — {seasonLabel} · {conditioningLabel}
             </p>
-            <div className="flex items-center gap-2 mt-2">
-              <span className="px-2.5 py-0.5 rounded-full border border-[#D9D3CC] dark:border-[#383C40] text-[10px] font-semibold text-[#6B7280] dark:text-[#9CA3AF]">
-                {seasonLabel}
-              </span>
-              <span className="px-2.5 py-0.5 rounded-full border border-[#D9D3CC] dark:border-[#383C40] text-[10px] font-semibold text-[#6B7280] dark:text-[#9CA3AF]">
-                {conditioningLabel}
-              </span>
-            </div>
           </div>
           <div className="flex items-center gap-3 print:hidden">
             <PrintButton label="Print Report" />

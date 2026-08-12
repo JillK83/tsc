@@ -23,7 +23,6 @@ export function AthleteCardPrint({ data }: Props) {
   const {
     athlete,
     program,
-    displayId,
     mostRecentMas,
     mostRecentSpeed,
     masHistory,
@@ -46,7 +45,14 @@ export function AthleteCardPrint({ data }: Props) {
           margin: 0.75in;
         }
         @media print {
-          body {
+          html, body {
+            background: #fff !important;
+            color: #000 !important;
+          }
+          body * {
+            background-color: transparent !important;
+            color: #000 !important;
+            border-color: #D1D5DB !important;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
           }
@@ -58,14 +64,13 @@ export function AthleteCardPrint({ data }: Props) {
         <div className="flex items-start justify-between mb-4 border-b border-gray-300 pb-3">
           <div>
             <h1 className="text-2xl font-extrabold text-black leading-tight">{athlete.name}</h1>
-            <div className="flex items-center gap-2 mt-1">
-              {athlete.position && (
+            {athlete.position && (
+              <div className="mt-1">
                 <span className="px-2 py-0.5 border border-gray-400 rounded text-[10px] font-semibold text-black">
                   {athlete.position}
                 </span>
-              )}
-              <span className="text-xs text-gray-600">ID: {displayId}</span>
-            </div>
+              </div>
+            )}
           </div>
           <div className="text-right text-xs text-gray-700">
             {testDate && <p className="font-semibold text-sm">{testDate}</p>}

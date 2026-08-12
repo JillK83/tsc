@@ -73,7 +73,7 @@ export function computePositionRank(
     const withMas = group.filter((a) => a.masMs !== null)
     const total = withMas.length
 
-    if (total < 2) {
+    if (total === 0) {
       for (const a of group) result.set(a.id, null)
       continue
     }

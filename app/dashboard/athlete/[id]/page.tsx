@@ -31,7 +31,7 @@ export default async function AthleteCardPage({ params, searchParams }: Props) {
 
   const navAthletes = data.navAthletes ?? []
   const currentIdx = navAthletes.findIndex((a) => a.id === id)
-  const hasPrev = navAthletes.length > 1
+  const hasPrev = currentIdx !== -1 && navAthletes.length > 1
   const prevAthlete = hasPrev
     ? navAthletes[(currentIdx - 1 + navAthletes.length) % navAthletes.length]
     : null
@@ -49,52 +49,54 @@ export default async function AthleteCardPage({ params, searchParams }: Props) {
       <div className="max-w-4xl mx-auto">
         {/* Screen nav */}
         <div className="flex items-center justify-between mb-6 print:hidden">
-          <div className="flex items-center gap-4">
-            {sessionId ? (
-              <Link
-                href={`/dashboard/session/${sessionId}/report`}
-                className="text-sm text-[#4A83D8] dark:text-[#5A8DEE] hover:underline focus:outline-none focus-visible:underline"
-              >
-                ← Back to Team Report
-              </Link>
-            ) : (
-              <Link
-                href="/dashboard"
-                className="text-sm text-[#4A83D8] dark:text-[#5A8DEE] hover:underline focus:outline-none focus-visible:underline"
-              >
-                ← Dashboard
-              </Link>
-            )}
-          </div>
-
-          <div className="flex items-center gap-3">
-            {hasPrev && prevAthlete && (
-              <Link
-                href={buildAthleteUrl(prevAthlete.id)}
-                className="text-sm text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#0F1515] dark:hover:text-[#F3F4F6] transition-colors focus:outline-none focus-visible:underline"
-              >
-                ← {prevAthlete.name}
-              </Link>
-            )}
-            {hasPrev && prevAthlete && nextAthlete && (
-              <span className="text-[#D9D3CC] dark:text-[#383C40]">|</span>
-            )}
-            {hasPrev && nextAthlete && (
-              <Link
-                href={buildAthleteUrl(nextAthlete.id)}
-                className="text-sm text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#0F1515] dark:hover:text-[#F3F4F6] transition-colors focus:outline-none focus-visible:underline"
-              >
-                {nextAthlete.name} →
-              </Link>
-            )}
-            <PrintButton label="Print Card" />
-          </div>
+          {sessionId ? (
+            <Link
+              href={`/dashboard/session/${sessionId}/report`}
+              className="text-sm text-[#4A83D8] dark:text-[#5A8DEE] hover:underline focus:outline-none focus-visible:underline"
+            >
+              ← Back to Team Report
+            </Link>
+          ) : (
+            <Link
+              href="/dashboard"
+              className="text-sm text-[#4A83D8] dark:text-[#5A8DEE] hover:underline focus:outline-none focus-visible:underline"
+            >
+              ← Dashboard
+            </Link>
+          )}
+          <PrintButton label="Print Card" />
         </div>
 
         {/* Screen card */}
         <div className="print:hidden">
           <AthleteCardScreen data={data} />
         </div>
+
+        {/* Prev/next nav — below card, muted */}
+        {hasPrev && (
+          <div className="flex items-center justify-between mt-4 print:hidden">
+            <div>
+              {prevAthlete && (
+                <Link
+                  href={buildAthleteUrl(prevAthlete.id)}
+                  className="text-sm text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#0F1515] dark:hover:text-[#F3F4F6] transition-colors focus:outline-none focus-visible:underline"
+                >
+                  ← {prevAthlete.name}
+                </Link>
+              )}
+            </div>
+            <div>
+              {nextAthlete && (
+                <Link
+                  href={buildAthleteUrl(nextAthlete.id)}
+                  className="text-sm text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#0F1515] dark:hover:text-[#F3F4F6] transition-colors focus:outline-none focus-visible:underline"
+                >
+                  {nextAthlete.name} →
+                </Link>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Print card */}
         <AthleteCardPrint data={data} />

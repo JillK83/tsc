@@ -111,7 +111,7 @@ describe('computePositionRank', () => {
     expect(ranks.get('b')?.total).toBe(3)
   })
 
-  it('returns null when fewer than 2 in the position group have masMs', () => {
+  it('single athlete with masMs in group gets rank 1 of 1; null masMs sibling gets null', () => {
     const athletes = [
       { id: 'a', masMs: 4.8, position: 'GK' },  // only one GK with masMs
       { id: 'b', masMs: null, position: 'GK' },
@@ -119,11 +119,22 @@ describe('computePositionRank', () => {
       { id: 'd', masMs: 4.2, position: 'MF' },
     ]
     const ranks = computePositionRank(athletes)
-    expect(ranks.get('a')).toBeNull()
+    expect(ranks.get('a')?.rank).toBe(1)
+    expect(ranks.get('a')?.total).toBe(1)
     expect(ranks.get('b')).toBeNull()
     // MF group has 2 — should rank
     expect(ranks.get('c')?.rank).toBe(1)
     expect(ranks.get('d')?.rank).toBe(2)
+  })
+
+  it('returns null for all in group when no athletes have masMs', () => {
+    const athletes = [
+      { id: 'a', masMs: null, position: 'GK' },
+      { id: 'b', masMs: null, position: 'GK' },
+    ]
+    const ranks = computePositionRank(athletes)
+    expect(ranks.get('a')).toBeNull()
+    expect(ranks.get('b')).toBeNull()
   })
 
   it('tied position-group athletes share rank, next skips', () => {
@@ -140,14 +151,15 @@ describe('computePositionRank', () => {
     expect(ranks.get('d')?.rank).toBe(4)
   })
 
-  it('athletes with null position are not ranked (group too small)', () => {
+  it('single null-position athlete with masMs gets rank 1 of 1', () => {
     const athletes = [
       { id: 'a', masMs: 4.8, position: null },
       { id: 'b', masMs: 4.5, position: 'MF' },
       { id: 'c', masMs: 4.2, position: 'MF' },
     ]
     const ranks = computePositionRank(athletes)
-    expect(ranks.get('a')).toBeNull()
+    expect(ranks.get('a')?.rank).toBe(1)
+    expect(ranks.get('a')?.total).toBe(1)
     expect(ranks.get('b')?.rank).toBe(1)
     expect(ranks.get('c')?.rank).toBe(2)
   })
