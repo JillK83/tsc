@@ -71,6 +71,7 @@ function ToggleGroup({
         <button
           key={opt.value}
           type="button"
+          aria-pressed={value === opt.value}
           onClick={() => onChange(opt.value)}
           className={[
             'px-3 py-1 rounded-full text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]',
@@ -92,7 +93,7 @@ function AthleteNameChips({ athletes }: { athletes: ProgrammingAthlete[] }) {
       {athletes.map((a) => (
         <span
           key={a.id}
-          className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-[#F0EFEA] dark:bg-[#2D3338] text-[#0F1515] dark:text-[#F3F4F6]"
+          className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-[#FAFAF8] dark:bg-[#2D3338] text-[#0F1515] dark:text-[#F3F4F6]"
         >
           {a.name}
         </span>
@@ -191,7 +192,7 @@ function MasPanel({ athletes }: { athletes: ProgrammingAthlete[] }) {
               <select
                 value={selectedId}
                 onChange={(e) => setSelectedId(e.target.value)}
-                className="ml-2 px-3 py-1.5 text-sm rounded-lg border border-[#D9D3CC] dark:border-[#383C40] bg-[#FFFFFF] dark:bg-[#262A2F] text-[#0F1515] dark:text-[#F3F4F6] focus:outline-none focus:border-[#4A83D8] dark:focus:border-[#5A8DEE]"
+                className="ml-2 px-3 py-1.5 text-sm rounded-lg border border-[#D9D3CC] dark:border-[#383C40] bg-[#FFFFFF] dark:bg-[#262A2F] text-[#0F1515] dark:text-[#F3F4F6] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8] dark:focus-visible:ring-[#5A8DEE]"
               >
                 <option value="">Select athlete…</option>
                 {masAthletes.map((a) => (
@@ -343,7 +344,7 @@ function AsrPanel({ athletes }: { athletes: ProgrammingAthlete[] }) {
             <select
               value={selectedId}
               onChange={(e) => setSelectedId(e.target.value)}
-              className="ml-2 px-3 py-1.5 text-sm rounded-lg border border-[#D9D3CC] dark:border-[#383C40] bg-[#FFFFFF] dark:bg-[#262A2F] text-[#0F1515] dark:text-[#F3F4F6] focus:outline-none focus:border-[#4A83D8] dark:focus:border-[#5A8DEE]"
+              className="ml-2 px-3 py-1.5 text-sm rounded-lg border border-[#D9D3CC] dark:border-[#383C40] bg-[#FFFFFF] dark:bg-[#262A2F] text-[#0F1515] dark:text-[#F3F4F6] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8] dark:focus-visible:ring-[#5A8DEE]"
             >
               <option value="">Select athlete…</option>
               {withBoth.map((a) => (
@@ -466,6 +467,7 @@ export function CoachProgrammingClient({ athletes }: CoachProgrammingClientProps
           </Link>
           <button
             type="button"
+            aria-pressed={activeTab === 'mas'}
             onClick={() => setActiveTab('mas')}
             className={[
               'px-4 py-2 rounded-xl text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]',
@@ -478,6 +480,7 @@ export function CoachProgrammingClient({ athletes }: CoachProgrammingClientProps
           </button>
           <button
             type="button"
+            aria-pressed={activeTab === 'asr'}
             onClick={() => setActiveTab('asr')}
             className={[
               'px-4 py-2 rounded-xl text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]',

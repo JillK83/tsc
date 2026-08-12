@@ -37,6 +37,7 @@ export function ChipSelector({ label, options, selected, onChange, maxSelections
             <button
               key={opt.value}
               type="button"
+              aria-pressed={isSelected}
               onClick={() => toggle(opt.value)}
               className={[
                 'px-3 py-1 rounded-full text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]',
