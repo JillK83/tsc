@@ -239,10 +239,12 @@ function MasPanel({ athletes }: { athletes: ProgrammingAthlete[] }) {
                     className="border-b border-[#E6E2DE] dark:border-[#30353A] last:border-0 hover:bg-[#FAFAF8] dark:hover:bg-[#2D3338] transition-colors"
                   >
                     <td className="px-4 py-3">
-                      <span className="text-[11px] text-[#6B7280] dark:text-[#9CA3AF] block">
-                        #{i + 1} · {group.key} m/s
-                      </span>
-                      <AthleteNameChips athletes={group.athletes} />
+                      <div className="flex flex-col justify-center h-full">
+                        <span className="text-[11px] text-[#6B7280] dark:text-[#9CA3AF] block mb-1">
+                          #{i + 1} · {group.key} m/s
+                        </span>
+                        <AthleteNameChips athletes={group.athletes} />
+                      </div>
                     </td>
                     {columns.map(({ int, wt }) => {
                       const dist = isShuttle
@@ -251,7 +253,7 @@ function MasPanel({ athletes }: { athletes: ProgrammingAthlete[] }) {
                       return (
                         <td
                           key={`${int}-${wt}`}
-                          className="px-4 py-3 text-right text-[13px] text-[#0F1515] dark:text-[#F3F4F6] tabular-nums"
+                          className="px-4 py-3 text-right text-[13px] text-[#0F1515] dark:text-[#F3F4F6] tabular-nums align-middle"
                         >
                           {isShuttle ? `${fmt(dist)} / ${fmt(dist)}` : `${fmt(dist)}m`}
                         </td>
@@ -392,17 +394,19 @@ function AsrPanel({ athletes }: { athletes: ProgrammingAthlete[] }) {
                   className="border-b border-[#E6E2DE] dark:border-[#30353A] last:border-0 hover:bg-[#FAFAF8] dark:hover:bg-[#2D3338] transition-colors"
                 >
                   <td className="px-4 py-3">
-                    <span className="text-[11px] text-[#6B7280] dark:text-[#9CA3AF] block">
-                      {a.asrMs.toFixed(1)}
-                    </span>
-                    <span className="text-[13px] font-medium text-[#0F1515] dark:text-[#F3F4F6]">
-                      {a.name}
-                    </span>
+                    <div className="flex flex-col justify-center h-full">
+                      <span className="text-[11px] text-[#6B7280] dark:text-[#9CA3AF] block mb-1">
+                        {a.asrMs.toFixed(1)}
+                      </span>
+                      <span className="px-3 py-1 rounded-full text-sm font-medium bg-[#FAFAF8] dark:bg-[#2D3338] text-[#0F1515] dark:text-[#F3F4F6] inline-block">
+                        {a.name}
+                      </span>
+                    </div>
                   </td>
                   {columns.map(({ pct, wt }) => (
                     <td
                       key={`${pct}-${wt}`}
-                      className="px-4 py-3 text-right text-[13px] text-[#0F1515] dark:text-[#F3F4F6] tabular-nums"
+                      className="px-4 py-3 text-right text-[13px] text-[#0F1515] dark:text-[#F3F4F6] tabular-nums align-middle"
                     >
                       {fmt(asrDistance(a.masMs, a.asrMs, pct, wt))}m
                     </td>
