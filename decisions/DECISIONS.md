@@ -209,6 +209,14 @@
 
 ---
 
+### Display precision vs. programming precision
+**Date:** August 2026
+**Decision:** Coach Programming Screen distances computed from full stored MAS precision (e.g. 4.777), not the displayed rounded value (4.8).
+**Why:** Rounding before the formula compounds error across intensity percentages and work intervals. Display rounding is presentation-layer only — never an input to calculations.
+**Coach awareness:** A 4.8 MAS athlete will see 46.1/46.1 shuttle (not 46.3/46.3) on the programming screen. This is correct. Brief Roger before first pilot session.
+
+---
+
 ### ASR panel row structure — one row per athlete
 **Date:** August 2026
 **Decision:** ASR panel shows one row per athlete, not grouped rows. MAS panel remains grouped.
