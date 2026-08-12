@@ -226,6 +226,14 @@
 
 ---
 
+### Director role enforcement — pre-pilot verification required
+**Date:** August 2026
+**Decision:** Director read-only enforcement is built at the DB action level in Phase 6. `getTeamReport` and `getAthleteCard` are read-only — no write actions are available on the team report or athlete card pages. However, end-to-end verification with an actual director-role user has not been completed. Only one user (GA/admin) exists in the system during development.
+**Required before pilot:** Create a test director account via Clerk dashboard, log in as that user, confirm team report and athlete card load correctly, confirm no write actions are accessible at UI or DB level. This is a go/no-go item per PRD Section 9 — "Director account can write data → HOLD."
+**Rule:** Do not share access with any non-GA user until this verification is complete.
+
+---
+
 ## Open decisions — resolve before building those components
 
 - [ ] Product name — finalize before public beta

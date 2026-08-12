@@ -136,6 +136,14 @@ export default async function DashboardPage() {
                           sessionId={s.id}
                           hasResults={sessionResultSet.has(s.id)}
                         />
+                        {s.testType === '20M_MST' && (
+                          <Link
+                            href={`/dashboard/session/${s.id}/report`}
+                            className="text-sm text-[#4A83D8] dark:text-[#5A8DEE] hover:underline focus:outline-none focus-visible:underline"
+                          >
+                            View Report →
+                          </Link>
+                        )}
                         <Link
                           href={
                             s.testType === '20M_MST'
