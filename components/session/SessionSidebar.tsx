@@ -41,14 +41,22 @@ export function SessionSidebar({
 
   function handleConditionsBlur() {
     startTransition(async () => {
-      await updateSessionConditions(sessionId, conditions)
+      try {
+        await updateSessionConditions(sessionId, conditions)
+      } catch (err) {
+        console.error('Failed to save conditions:', err)
+      }
     })
   }
 
   function handlePhaseChange(phase: SeasonPhase) {
     setSeasonPhase(phase)
     startTransition(async () => {
-      await updateProgramSeasonPhase(phase)
+      try {
+        await updateProgramSeasonPhase(phase)
+      } catch (err) {
+        console.error('Failed to save season phase:', err)
+      }
     })
   }
 
