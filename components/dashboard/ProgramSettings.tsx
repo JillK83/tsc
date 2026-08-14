@@ -60,9 +60,16 @@ export function ProgramSettings({ seasonPhase, conditioningGoal }: Props) {
   if (!editing) {
     return (
       <div className="flex items-center gap-2 mt-1">
-        <p className="text-sm text-[#6B7280] dark:text-[#9CA3AF]">
-          {SEASON_LABELS[seasonPhase]} · {GOAL_LABELS[conditioningGoal]}
-        </p>
+        {SEASON_LABELS[seasonPhase] && (
+          <span className="text-xs font-medium px-2 py-0.5 rounded-full border border-[#D9D3CC] dark:border-[#383C40] text-[#6B7280] dark:text-[#9CA3AF] bg-transparent">
+            {SEASON_LABELS[seasonPhase]}
+          </span>
+        )}
+        {GOAL_LABELS[conditioningGoal] && (
+          <span className="text-xs font-medium px-2 py-0.5 rounded-full border border-[#D9D3CC] dark:border-[#383C40] text-[#6B7280] dark:text-[#9CA3AF] bg-transparent">
+            {GOAL_LABELS[conditioningGoal]}
+          </span>
+        )}
         <button
           type="button"
           onClick={() => setEditing(true)}

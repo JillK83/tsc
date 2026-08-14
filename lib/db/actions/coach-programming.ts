@@ -4,7 +4,8 @@ import { auth } from '@clerk/nextjs/server'
 import { eq, and, inArray, desc } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { setSchoolContext } from '@/lib/db/with-school'
-import { athletes, masResults, speedResults, programs, users } from '@/lib/db/schema'
+import { resolveActiveProgramId } from '@/lib/programs/resolver'
+import { athletes, masResults, speedResults, users } from '@/lib/db/schema'
 
 export type ProgrammingAthlete = {
   id: string
@@ -24,13 +25,7 @@ async function getDbUser() {
 }
 
 async function getProgramId(schoolId: string) {
-  const [program] = await db
-    .select()
-    .from(programs)
-    .where(eq(programs.schoolId, schoolId))
-    .limit(1)
-  if (!program) throw new Error('No program found for this school')
-  return program.id
+  return resolveActiveProgramId(schoolId)
 }
 
 export async function getAthletesForProgramming(): Promise<ProgrammingAthlete[]> {

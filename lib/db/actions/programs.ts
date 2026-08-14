@@ -1,9 +1,10 @@
 'use server'
 
 import { auth } from '@clerk/nextjs/server'
-import { eq } from 'drizzle-orm'
+import { and, asc, eq } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { setSchoolContext } from '@/lib/db/with-school'
+import { resolveActiveProgramId, setActiveProgramId } from '@/lib/programs/resolver'
 import { programs, users } from '@/lib/db/schema'
 
 type ProgramDraft = {
@@ -68,14 +69,7 @@ export async function upsertProgram(data: ProgramDraft) {
 
 export async function updateProgramPrintPrefs(data: PrintPrefs) {
   const user = await getDbUser()
-
-  const [existing] = await db
-    .select()
-    .from(programs)
-    .where(eq(programs.schoolId, user.schoolId))
-    .limit(1)
-
-  if (!existing) throw new Error('No program found for this school')
+  const programId = await resolveActiveProgramId(user.schoolId)
 
   const [updated] = await db
     .update(programs)
@@ -83,8 +77,9 @@ export async function updateProgramPrintPrefs(data: PrintPrefs) {
       printPaperSize: data.printPaperSize,
       printColor: data.printColor,
     })
-    .where(eq(programs.id, existing.id))
+    .where(and(eq(programs.id, programId), eq(programs.schoolId, user.schoolId)))
     .returning()
+  if (!updated) throw new Error('No program found for this school')
   return updated
 }
 
@@ -92,20 +87,14 @@ export async function updateProgramSeasonPhase(
   seasonPhase: 'offseason' | 'preseason' | 'in_season' | 'postseason'
 ) {
   const user = await getDbUser()
-
-  const [existing] = await db
-    .select()
-    .from(programs)
-    .where(eq(programs.schoolId, user.schoolId))
-    .limit(1)
-
-  if (!existing) throw new Error('No program found for this school')
+  const programId = await resolveActiveProgramId(user.schoolId)
 
   const [updated] = await db
     .update(programs)
     .set({ seasonPhase })
-    .where(eq(programs.id, existing.id))
+    .where(and(eq(programs.id, programId), eq(programs.schoolId, user.schoolId)))
     .returning()
+  if (!updated) throw new Error('No program found for this school')
   return updated
 }
 
@@ -114,14 +103,7 @@ export async function updateProgramSettings(data: {
   conditioningGoal: 'build' | 'maintain' | 'peak'
 }) {
   const user = await getDbUser()
-
-  const [existing] = await db
-    .select()
-    .from(programs)
-    .where(eq(programs.schoolId, user.schoolId))
-    .limit(1)
-
-  if (!existing) throw new Error('No program found for this school')
+  const programId = await resolveActiveProgramId(user.schoolId)
 
   const [updated] = await db
     .update(programs)
@@ -129,19 +111,65 @@ export async function updateProgramSettings(data: {
       seasonPhase: data.seasonPhase,
       conditioningGoal: data.conditioningGoal,
     })
-    .where(eq(programs.id, existing.id))
+    .where(and(eq(programs.id, programId), eq(programs.schoolId, user.schoolId)))
     .returning()
+  if (!updated) throw new Error('No program found for this school')
   return updated
 }
 
 export async function getProgram() {
   const user = await getDbUser()
+  const programId = await resolveActiveProgramId(user.schoolId)
 
   const [program] = await db
     .select()
     .from(programs)
-    .where(eq(programs.schoolId, user.schoolId))
+    .where(and(eq(programs.id, programId), eq(programs.schoolId, user.schoolId)))
     .limit(1)
 
   return program ?? null
+}
+
+/** All programs for the active user's school, for the nav-bar switcher. */
+export async function listPrograms() {
+  const user = await getDbUser()
+
+  return db
+    .select({ id: programs.id, sport: programs.sport, name: programs.name })
+    .from(programs)
+    .where(eq(programs.schoolId, user.schoolId))
+    .orderBy(asc(programs.sport), asc(programs.name))
+}
+
+/** Create a new program under the user's school and make it the active one. */
+export async function createProgram(data: ProgramDraft) {
+  const user = await getDbUser()
+
+  const [created] = await db
+    .insert(programs)
+    .values({
+      schoolId: user.schoolId,
+      sport: data.sport,
+      name: data.name,
+      seasonPhase: data.seasonPhase,
+      conditioningGoal: data.conditioningGoal,
+    })
+    .returning()
+
+  await setActiveProgramId(created.id)
+  return created
+}
+
+/** Switch the active program. Rejects any program outside the user's school. */
+export async function setActiveProgram(programId: string) {
+  const user = await getDbUser()
+
+  const [program] = await db
+    .select({ id: programs.id })
+    .from(programs)
+    .where(and(eq(programs.id, programId), eq(programs.schoolId, user.schoolId)))
+    .limit(1)
+  if (!program) throw new Error('Program not found for this school')
+
+  await setActiveProgramId(program.id)
 }

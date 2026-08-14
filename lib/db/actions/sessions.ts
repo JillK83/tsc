@@ -4,7 +4,8 @@ import { auth } from '@clerk/nextjs/server'
 import { eq, and, desc, count, inArray } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { setSchoolContext } from '@/lib/db/with-school'
-import { testSessions, users, programs, masResults, speedResults } from '@/lib/db/schema'
+import { resolveActiveProgramId } from '@/lib/programs/resolver'
+import { testSessions, users, masResults, speedResults } from '@/lib/db/schema'
 
 type SessionInput = {
   date: string
@@ -22,13 +23,7 @@ async function getDbUser() {
 }
 
 async function getProgramId(schoolId: string) {
-  const [program] = await db
-    .select()
-    .from(programs)
-    .where(eq(programs.schoolId, schoolId))
-    .limit(1)
-  if (!program) throw new Error('No program found for this school')
-  return program.id
+  return resolveActiveProgramId(schoolId)
 }
 
 export async function createSession(input: SessionInput) {
@@ -85,11 +80,17 @@ export async function updateSessionConditions(sessionId: string, conditions: str
 
 export async function listSessions() {
   const user = await getDbUser()
+  const programId = await getProgramId(user.schoolId)
 
   return db
     .select()
     .from(testSessions)
-    .where(eq(testSessions.schoolId, user.schoolId))
+    .where(
+      and(
+        eq(testSessions.schoolId, user.schoolId),
+        eq(testSessions.programId, programId)
+      )
+    )
     .orderBy(desc(testSessions.date), desc(testSessions.createdAt))
 }
 

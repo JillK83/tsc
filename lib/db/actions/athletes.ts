@@ -4,7 +4,8 @@ import { auth } from '@clerk/nextjs/server'
 import { eq, and } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { setSchoolContext } from '@/lib/db/with-school'
-import { athletes, programs, users } from '@/lib/db/schema'
+import { resolveActiveProgramId } from '@/lib/programs/resolver'
+import { athletes, users } from '@/lib/db/schema'
 
 type AthleteInput = {
   name: string
@@ -26,13 +27,7 @@ async function getDbUser() {
 }
 
 async function getProgramId(schoolId: string) {
-  const [program] = await db
-    .select()
-    .from(programs)
-    .where(eq(programs.schoolId, schoolId))
-    .limit(1)
-  if (!program) throw new Error('No program found for this school')
-  return program.id
+  return resolveActiveProgramId(schoolId)
 }
 
 export async function bulkInsertAthletes(athleteList: AthleteInput[]) {

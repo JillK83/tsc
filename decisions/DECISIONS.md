@@ -256,6 +256,26 @@
 **Required before pilot:** Create a test director account via Clerk dashboard, log in as that user, confirm team report and athlete card load correctly, confirm no write actions are accessible at UI or DB level. This is a go/no-go item per PRD Section 9 — "Director account can write data → HOLD."
 **Rule:** Do not share access with any non-GA user until this verification is complete.
 
+### Active program persistence — cookie-based for V1 pilot
+**Date:** August 2026
+**Decision:** Multi-program support (Phase 7B) persists the active program in a non-httpOnly cookie (`tsc_active_program`) for the V1 pilot (single GA, single device). Upgrade to a `current_program_id` column on the `users` table in V1.5 when multi-device or multi-user access is needed. The resolver lives in `/lib/programs/resolver.ts` for a clean swap — it is the only module that knows the persistence mechanism, so V1.5 changes it there without touching call sites.
+**Rule:** The resolver validates the cookie's program against the user's `school_id` and falls back to the school's oldest program; a foreign/stale cookie can never resolve to another school's program (preserves school isolation).
+
+---
+
+## V1.5 deferred — revisit at second user / multi-device
+
+- Active program persistence — upgrade from cookie to `current_program_id` column on `users` table in V1.5 when multi-device or multi-user access is needed
+- School logo slot in nav bar: file already exists at `public/logos/school-logo.png` (unused after the logo was removed in Phase 7A). When the official FDU asset arrives, add it back to the nav bar **right cluster, before the theme toggle**. Target dimensions **44×44px**, `object-fit: contain`, transparent PNG preferred; **keep nav bar height at 64px** (no increase needed). Request the FDU **athletic mark** — the sword + outlined "FDU" letters on a **transparent** background (the earlier `fdu_png_logo.png`), NOT the shield crest / university seal, and not the maroon-background version (a maroon square reads as a colored box on the dark navy nav). The white-outline letterforms read cleanly at 44px on navy. Wire to the hardcoded `/public/logos/school-logo.png` for the V1.5 pilot; migrate to a `logo_url` column on the `schools` table in V3 when multi-school support lands.
+
+---
+
+## V2 deferred — revisit post-pilot
+
+- Session phase visibility on dashboard sessions table — show season phase per session row in V2
+- Dashboard sessions table filters — All / by phase tab filter in V2
+- Goal Keeper two-line wrap in team report print POS column — revisit when roster grows beyond pilot
+
 ---
 
 ## Open decisions — resolve before building those components

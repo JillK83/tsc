@@ -49,11 +49,6 @@ export default async function DashboardPage() {
         {/* Header */}
         <div className="flex items-start justify-between mb-8">
           <div>
-            {program && (
-              <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-[#9CA3AF] mb-1">
-                {program.sport} · {program.name}
-              </p>
-            )}
             <h1 className="text-2xl font-bold text-[#0F1515] dark:text-[#F3F4F6]">
               Dashboard
             </h1>
@@ -67,19 +62,19 @@ export default async function DashboardPage() {
           <div className="flex items-center gap-3">
             <Link
               href="/dashboard/coach-programming"
-              className="px-4 py-2 rounded-xl border-2 border-[#4A83D8] dark:border-[#5A8DEE] text-[#4A83D8] dark:text-[#5A8DEE] text-sm font-semibold hover:bg-[#EBF2FD] dark:hover:bg-[rgba(90,141,238,0.15)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]"
+              className="h-9 inline-flex items-center px-4 rounded-xl border-2 border-[#4A83D8] dark:border-[#5A8DEE] text-[#4A83D8] dark:text-[#5A8DEE] text-sm font-semibold hover:bg-[#EBF2FD] dark:hover:bg-[rgba(90,141,238,0.15)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]"
             >
               Coach Programming
             </Link>
             <Link
               href="/dashboard/roster"
-              className="px-4 py-2 rounded-xl border-2 border-[#4A83D8] dark:border-[#5A8DEE] text-[#4A83D8] dark:text-[#5A8DEE] text-sm font-semibold hover:bg-[#EBF2FD] dark:hover:bg-[rgba(90,141,238,0.15)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]"
+              className="h-9 inline-flex items-center px-4 rounded-xl border-2 border-[#4A83D8] dark:border-[#5A8DEE] text-[#4A83D8] dark:text-[#5A8DEE] text-sm font-semibold hover:bg-[#EBF2FD] dark:hover:bg-[rgba(90,141,238,0.15)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]"
             >
               Roster
             </Link>
             <Link
               href="/dashboard/session/new"
-              className="px-4 py-2 rounded-xl bg-[#4A83D8] dark:bg-[#5A8DEE] text-white text-sm font-semibold hover:bg-[#2E65BE] dark:hover:bg-[#4A83D8] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]"
+              className="h-9 inline-flex items-center px-4 rounded-xl bg-[#4A83D8] dark:bg-[#5A8DEE] text-white text-sm font-semibold hover:bg-[#2E65BE] dark:hover:bg-[#4A83D8] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]"
             >
               + New session
             </Link>
@@ -97,7 +92,7 @@ export default async function DashboardPage() {
           {sessions.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <p className="text-sm text-[#6B7280] dark:text-[#9CA3AF] mb-4">
-                No sessions yet. Create your first session to start entering data.
+                No sessions yet. Start by creating your first test session.
               </p>
               <Link
                 href="/dashboard/session/new"
