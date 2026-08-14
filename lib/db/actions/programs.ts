@@ -99,15 +99,20 @@ export async function updateProgramSeasonPhase(
 }
 
 export async function updateProgramSettings(data: {
+  name: string
   seasonPhase: 'offseason' | 'preseason' | 'in_season' | 'postseason'
   conditioningGoal: 'build' | 'maintain' | 'peak'
 }) {
   const user = await getDbUser()
   const programId = await resolveActiveProgramId(user.schoolId)
 
+  const name = data.name.trim()
+  if (!name) throw new Error('Program name is required')
+
   const [updated] = await db
     .update(programs)
     .set({
+      name,
       seasonPhase: data.seasonPhase,
       conditioningGoal: data.conditioningGoal,
     })

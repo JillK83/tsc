@@ -47,19 +47,11 @@ export default async function DashboardPage() {
     <div className="min-h-full bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-12">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="flex items-start justify-between mb-8">
-          <div>
-            <h1 className="text-2xl font-bold text-[#0F1515] dark:text-[#F3F4F6]">
-              Dashboard
-            </h1>
-            {program && (
-              <ProgramSettings
-                seasonPhase={program.seasonPhase}
-                conditioningGoal={program.conditioningGoal}
-              />
-            )}
-          </div>
-          <div className="flex items-center gap-3">
+        <div className="flex items-start justify-between gap-4 mb-4">
+          <h1 className="text-2xl font-bold text-[#0F1515] dark:text-[#F3F4F6]">
+            Dashboard
+          </h1>
+          <div className="flex items-center gap-3 flex-shrink-0">
             <Link
               href="/dashboard/coach-programming"
               className="h-9 inline-flex items-center px-4 rounded-xl border-2 border-[#4A83D8] dark:border-[#5A8DEE] text-[#4A83D8] dark:text-[#5A8DEE] text-sm font-semibold hover:bg-[#EBF2FD] dark:hover:bg-[rgba(90,141,238,0.15)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]"
@@ -80,6 +72,17 @@ export default async function DashboardPage() {
             </Link>
           </div>
         </div>
+
+        {/* Program settings — own row so the edit form never crowds the buttons */}
+        {program && (
+          <div className="mb-8">
+            <ProgramSettings
+              name={program.name}
+              seasonPhase={program.seasonPhase}
+              conditioningGoal={program.conditioningGoal}
+            />
+          </div>
+        )}
 
         {/* Sessions */}
         <div className="bg-[#FFFFFF] dark:bg-[#262A2F] rounded-2xl border border-[#D9D3CC] dark:border-[#383C40] overflow-hidden">

@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import { SelectMenu } from '@/components/ui/SelectMenu'
 import {
   createAthlete,
   updateAthlete,
@@ -80,7 +81,7 @@ export function AthleteForm({ mode, initial, athleteId }: Props) {
   }
 
   return (
-    <div className="bg-[#FFFFFF] dark:bg-[#262A2F] rounded-2xl border border-[#D9D3CC] dark:border-[#383C40] p-6 space-y-5">
+    <div className="w-full bg-[#FFFFFF] dark:bg-[#262A2F] rounded-2xl border border-[#D9D3CC] dark:border-[#383C40] p-6 space-y-5">
       <div>
         <label htmlFor="name" className={LABEL_CLASS}>
           Name <span aria-hidden="true">*</span>
@@ -116,7 +117,7 @@ export function AthleteForm({ mode, initial, athleteId }: Props) {
           type="text"
           value={form.position}
           onChange={(e) => set('position', e.target.value)}
-          placeholder="e.g. MF, FWD, GK"
+          placeholder="e.g. Mid Fielder"
           className={INPUT_CLASS}
         />
       </div>
@@ -125,22 +126,18 @@ export function AthleteForm({ mode, initial, athleteId }: Props) {
         <label htmlFor="sex" className={LABEL_CLASS}>
           Sex <span aria-hidden="true">*</span>
         </label>
-        <select
+        <SelectMenu
           id="sex"
           value={form.sex}
-          onChange={(e) => set('sex', e.target.value)}
-          aria-required="true"
-          className={[
-            INPUT_CLASS,
-            errors.sex ? 'border-[#A83232]' : '',
-          ].join(' ')}
-        >
-          <option value="" disabled>
-            Select…
-          </option>
-          <option value="female">Female</option>
-          <option value="male">Male</option>
-        </select>
+          onChange={(v) => set('sex', v)}
+          placeholder="Select"
+          invalid={!!errors.sex}
+          options={[
+            { value: '', label: 'Select', disabled: true },
+            { value: 'female', label: 'Female' },
+            { value: 'male', label: 'Male' },
+          ]}
+        />
         {errors.sex && (
           <p className="mt-1 text-xs text-[#A83232] dark:text-[#EF8E8E]">{errors.sex}</p>
         )}

@@ -47,7 +47,7 @@ export default function NewSessionPage() {
 
   return (
     <div className="min-h-full bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-10">
-      <div className="max-w-lg mx-auto">
+      <div className="w-[520px] max-w-full mx-auto">
         <Link
           href="/dashboard"
           className="text-sm text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#0F1515] dark:hover:text-[#F3F4F6] transition-colors focus:outline-none focus-visible:underline mb-4 inline-block"
@@ -58,7 +58,7 @@ export default function NewSessionPage() {
           New session
         </h1>
 
-        <div className="bg-[#FFFFFF] dark:bg-[#262A2F] rounded-2xl border border-[#D9D3CC] dark:border-[#383C40] p-6 space-y-6">
+        <div className="w-full bg-[#FFFFFF] dark:bg-[#262A2F] rounded-2xl border border-[#D9D3CC] dark:border-[#383C40] p-6 space-y-6">
           {/* Test type */}
           <fieldset>
             <legend className="text-[11px] font-semibold uppercase tracking-[0.06em] text-[#6B7280] dark:text-[#9CA3AF] mb-3">

@@ -83,7 +83,10 @@ export function AthleteCardScreen({ data }: Props) {
             </h2>
             <div className="flex items-center gap-2 mt-2">
               {athlete.position && (
-                <span className="px-2.5 py-0.5 rounded-md border border-[#D9D3CC] dark:border-[#383C40] text-xs font-semibold text-[#0F1515] dark:text-[#F3F4F6]">
+                <span
+                  className="px-2.5 py-0.5 rounded-md border border-[#D9D3CC] dark:border-[#383C40] text-xs font-semibold text-[#0F1515] dark:text-[#F3F4F6]"
+                  title={athlete.position}
+                >
                   {athlete.position}
                 </span>
               )}

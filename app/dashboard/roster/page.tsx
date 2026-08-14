@@ -77,7 +77,10 @@ export default async function RosterPage() {
                     <td className="px-4 py-3 text-sm font-medium text-[#0F1515] dark:text-[#F3F4F6]">
                       {athlete.name}
                     </td>
-                    <td className="px-4 py-3 text-[13px] text-[#6B7280] dark:text-[#9CA3AF]">
+                    <td
+                      className="px-4 py-3 text-[13px] text-[#6B7280] dark:text-[#9CA3AF]"
+                      title={athlete.position || undefined}
+                    >
                       {athlete.position || '—'}
                     </td>
                     <td className="px-4 py-3 text-[13px] text-[#6B7280] dark:text-[#9CA3AF] capitalize">

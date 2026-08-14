@@ -429,7 +429,7 @@ function SpeedEntryRow({ row, onInputChange, onBlur, onNotesChange }: RowProps) 
                 {row.name}
               </p>
               {row.position && (
-                <p className="text-xs text-[#9CA3AF] dark:text-[#6B7280]">{row.position}</p>
+                <p className="text-xs text-[#9CA3AF] dark:text-[#6B7280]" title={row.position}>{row.position}</p>
               )}
             </div>
           </div>
