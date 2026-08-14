@@ -4,8 +4,8 @@ import Link from 'next/link'
 import { getOnboardingStatus } from '@/lib/db/actions/onboarding'
 import { listSessions, getSessionsWithResults } from '@/lib/db/actions/sessions'
 import { getProgram } from '@/lib/db/actions/programs'
-import { ThemeToggle } from '@/components/theme-toggle'
 import { DeleteSessionButton } from '@/components/session/DeleteSessionButton'
+import { ProgramSettings } from '@/components/dashboard/ProgramSettings'
 
 function formatDate(iso: string) {
   return new Date(iso + 'T00:00:00').toLocaleDateString('en-US', {
@@ -27,7 +27,7 @@ export default async function DashboardPage() {
   const role = user.publicMetadata?.role as string | undefined
   if (!role) {
     return (
-      <div className="min-h-screen bg-[#EEECEA] dark:bg-[#181A1C] flex items-center justify-center">
+      <div className="min-h-full bg-[#EEECEA] dark:bg-[#181A1C] flex items-center justify-center">
         <p className="text-sm text-[#9CA3AF]">
           Account not provisioned. Contact your administrator.
         </p>
@@ -44,7 +44,7 @@ export default async function DashboardPage() {
     : new Set<string>()
 
   return (
-    <div className="min-h-screen bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-12">
+    <div className="min-h-full bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-12">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex items-start justify-between mb-8">
@@ -57,9 +57,14 @@ export default async function DashboardPage() {
             <h1 className="text-2xl font-bold text-[#0F1515] dark:text-[#F3F4F6]">
               Dashboard
             </h1>
+            {program && (
+              <ProgramSettings
+                seasonPhase={program.seasonPhase}
+                conditioningGoal={program.conditioningGoal}
+              />
+            )}
           </div>
           <div className="flex items-center gap-3">
-            <ThemeToggle />
             <Link
               href="/dashboard/coach-programming"
               className="px-4 py-2 rounded-xl border-2 border-[#4A83D8] dark:border-[#5A8DEE] text-[#4A83D8] dark:text-[#5A8DEE] text-sm font-semibold hover:bg-[#EBF2FD] dark:hover:bg-[rgba(90,141,238,0.15)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]"
@@ -136,7 +141,7 @@ export default async function DashboardPage() {
                           sessionId={s.id}
                           hasResults={sessionResultSet.has(s.id)}
                         />
-                        {s.testType === '20M_MST' && (
+                        {s.testType === '20M_MST' && sessionResultSet.has(s.id) && (
                           <Link
                             href={`/dashboard/session/${s.id}/report`}
                             className="px-3 py-1.5 rounded-xl bg-[#4A83D8] dark:bg-[#5A8DEE] text-white text-xs font-semibold hover:bg-[#2E65BE] dark:hover:bg-[#4A83D8] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]"

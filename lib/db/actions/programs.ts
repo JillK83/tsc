@@ -109,6 +109,31 @@ export async function updateProgramSeasonPhase(
   return updated
 }
 
+export async function updateProgramSettings(data: {
+  seasonPhase: 'offseason' | 'preseason' | 'in_season' | 'postseason'
+  conditioningGoal: 'build' | 'maintain' | 'peak'
+}) {
+  const user = await getDbUser()
+
+  const [existing] = await db
+    .select()
+    .from(programs)
+    .where(eq(programs.schoolId, user.schoolId))
+    .limit(1)
+
+  if (!existing) throw new Error('No program found for this school')
+
+  const [updated] = await db
+    .update(programs)
+    .set({
+      seasonPhase: data.seasonPhase,
+      conditioningGoal: data.conditioningGoal,
+    })
+    .where(eq(programs.id, existing.id))
+    .returning()
+  return updated
+}
+
 export async function getProgram() {
   const user = await getDbUser()
 

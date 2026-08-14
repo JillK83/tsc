@@ -11,7 +11,7 @@ export default async function CoachProgrammingPage() {
   const role = user.publicMetadata?.role as string | undefined
   if (!role) {
     return (
-      <div className="min-h-screen bg-[#EEECEA] dark:bg-[#181A1C] flex items-center justify-center">
+      <div className="min-h-full bg-[#EEECEA] dark:bg-[#181A1C] flex items-center justify-center">
         <p className="text-sm text-[#9CA3AF]">
           Account not provisioned. Contact your administrator.
         </p>
@@ -25,7 +25,7 @@ export default async function CoachProgrammingPage() {
   const athletes = await getAthletesForProgramming()
 
   return (
-    <div className="min-h-screen bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-12">
+    <div className="min-h-full bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-12">
       <div className="max-w-6xl mx-auto">
         <CoachProgrammingClient athletes={athletes} />
       </div>

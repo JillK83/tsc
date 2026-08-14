@@ -45,26 +45,31 @@ export default async function AthleteCardPage({ params, searchParams }: Props) {
       : `/dashboard/athlete/${athleteId}`
 
   return (
-    <div className="min-h-screen bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-12">
+    <div className="min-h-full bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-12">
       <div className="max-w-4xl mx-auto">
         {/* Screen nav */}
-        <div className="flex items-center justify-between mb-6 print:hidden">
+        <div className="flex items-start justify-between mb-6 print:hidden">
           {sessionId ? (
             <Link
               href={`/dashboard/session/${sessionId}/report`}
-              className="text-sm text-[#4A83D8] dark:text-[#5A8DEE] hover:underline focus:outline-none focus-visible:underline"
+              className="text-sm text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#0F1515] dark:hover:text-[#F3F4F6] transition-colors focus:outline-none focus-visible:underline"
             >
               ← Back to Team Report
             </Link>
           ) : (
             <Link
               href="/dashboard"
-              className="text-sm text-[#4A83D8] dark:text-[#5A8DEE] hover:underline focus:outline-none focus-visible:underline"
+              className="text-sm text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#0F1515] dark:hover:text-[#F3F4F6] transition-colors focus:outline-none focus-visible:underline"
             >
               ← Dashboard
             </Link>
           )}
-          <PrintButton label="Print Card" />
+          <div className="flex flex-col items-end gap-1">
+            <PrintButton label="Print Card" />
+            <p className="text-[11px] text-[#9CA3AF] dark:text-[#6B7280] max-w-[180px] text-right">
+              For best results, uncheck Headers and footers in the print dialog.
+            </p>
+          </div>
         </div>
 
         {/* Screen card */}

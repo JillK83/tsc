@@ -3,7 +3,6 @@ import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { getOnboardingStatus } from '@/lib/db/actions/onboarding'
 import Link from 'next/link'
-import { ThemeToggle } from '@/components/theme-toggle'
 
 export default async function NewAthletePage() {
   const { userId } = await auth()
@@ -13,12 +12,11 @@ export default async function NewAthletePage() {
   if (!status?.completed) redirect('/onboarding/1')
 
   return (
-    <div className="min-h-screen bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-10 relative">
-      <div className="absolute top-4 right-4"><ThemeToggle /></div>
+    <div className="min-h-full bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-10">
       <div className="max-w-lg mx-auto">
         <Link
           href="/dashboard/roster"
-          className="text-xs text-[#4A83D8] dark:text-[#5A8DEE] hover:underline mb-4 inline-block"
+          className="text-sm text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#0F1515] dark:hover:text-[#F3F4F6] transition-colors focus:outline-none focus-visible:underline mb-4 inline-block"
         >
           ← Roster
         </Link>

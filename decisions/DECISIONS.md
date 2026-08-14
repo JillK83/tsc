@@ -91,6 +91,8 @@
 **Why:** Roger confirmed. "Estimated" is a trust calibration mechanism, not decoration. Never abbreviate it outside confirmed compact contexts.
 **Note:** The open question was "Est." vs "Estimated" in compact table headers. Roger confirmed full word throughout.
 
+**Amendment (Phase 7A, August 2026):** The full "Estimated VO2max" is retained in all on-screen contexts (Team Report screen, Athlete Card screen) and the Athlete Card print test-history table. The Team Report **print** column header abbreviates to "Est. VO2max" / "mL/kg/min" to relieve landscape column compression — this is an OPEN question pending Roger sign-off (see Open decisions). The screen keeps the full word regardless of outcome.
+
 ---
 
 ### Buyer role clarification
@@ -258,6 +260,7 @@
 
 ## Open decisions — resolve before building those components
 
+- [ ] Team report print column header — "Estimated VO2max" vs "Est. VO2max": full word causes print layout compression. Pending Roger sign-off on compact exception for print context only. Screen version keeps full word regardless of outcome.
 - [ ] Product name — finalize before public beta
 - [x] Neon RLS policies — written and applied in Phase 1 (school_isolation on all 7 tables, live in Neon)
 - [ ] Clerk magic link — test delivery to school email addresses (spam filter risk)

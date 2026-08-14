@@ -67,8 +67,14 @@ export default async function TeamReportPage({ params }: Props) {
   const conditioningLabel = CONDITIONING_LABELS[data.program.conditioningGoal] ?? data.program.conditioningGoal
 
   return (
-    <div className="min-h-screen bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-12">
+    <div className="min-h-full bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-12">
       <div className="max-w-6xl mx-auto">
+        <Link
+          href="/dashboard"
+          className="text-sm text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#0F1515] dark:hover:text-[#F3F4F6] transition-colors focus:outline-none focus-visible:underline mb-4 inline-block print:hidden"
+        >
+          ← Dashboard
+        </Link>
         {/* Header */}
         <div className="flex items-start justify-between mb-8">
           <div>
@@ -80,14 +86,11 @@ export default async function TeamReportPage({ params }: Props) {
               {dateDisplay} — {seasonLabel} · {conditioningLabel}
             </p>
           </div>
-          <div className="flex items-center gap-3 print:hidden">
+          <div className="flex flex-col items-end gap-1 print:hidden">
             <PrintButton label="Print Report" />
-            <Link
-              href="/dashboard"
-              className="px-4 py-2 rounded-xl border-2 border-[#4A83D8] dark:border-[#5A8DEE] text-[#4A83D8] dark:text-[#5A8DEE] text-sm font-semibold hover:bg-[#EBF2FD] dark:hover:bg-[rgba(90,141,238,0.15)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]"
-            >
-              ← Dashboard
-            </Link>
+            <p className="text-[11px] text-[#9CA3AF] dark:text-[#6B7280] max-w-[180px] text-right">
+              For best results, uncheck Headers and footers in the print dialog.
+            </p>
           </div>
         </div>
 

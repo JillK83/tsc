@@ -34,14 +34,14 @@ export function TeamReportTable({ data }: Props) {
     return 0
   })
 
-  const colHeaders: { key: SortKey | null; label: string; subLabel?: string }[] = [
+  const colHeaders: { key: SortKey | null; label: string; printLabel?: string; subLabel?: string }[] = [
     { key: null, label: 'Rank' },
     { key: null, label: 'Athlete Name' },
     { key: null, label: 'POS' },
     { key: null, label: '20M MST', subLabel: 'Level.Shuttle' },
     { key: null, label: 'Total Shuttles' },
     { key: 'mas', label: 'MAS (M/S)' },
-    { key: 'vo2max', label: 'Estimated VO2max', subLabel: 'mL/kg/min' },
+    { key: 'vo2max', label: 'Estimated VO2max', printLabel: 'Est. VO2max', subLabel: 'mL/kg/min' },
     { key: 'mss', label: 'MSS (M/S)' },
     { key: null, label: 'ASR' },
     { key: null, label: 'Test Date' },
@@ -50,7 +50,29 @@ export function TeamReportTable({ data }: Props) {
   return (
     <div>
       <style>{`
+        /* NOTE: In the Chrome print dialog, uncheck "Headers and footers"
+           for a clean sheet (no URL/date margins). */
+        @page {
+          size: landscape;
+          margin: 0.5in;
+        }
         @media print {
+          /* App chrome off */
+          nav { display: none !important; }
+          a { color: #000 !important; text-decoration: none !important; }
+
+          /* Force legible black-on-white regardless of light/dark theme */
+          html, body { background: #fff !important; }
+          .team-report-table,
+          .team-report-table th,
+          .team-report-table td {
+            color: #000 !important;
+            background: #fff !important;
+            border-color: #D1D5DB !important;
+          }
+          /* MAS column header + sort indicator (blue on screen) → black on paper */
+          .team-report-table th * { color: #000 !important; }
+
           .team-report-table {
             table-layout: fixed;
             width: 100%;
@@ -63,6 +85,28 @@ export function TeamReportTable({ data }: Props) {
             text-overflow: ellipsis;
             white-space: nowrap;
           }
+          /* Explicit column widths so long names don't truncate and the
+             Est. VO2max header doesn't clip. Name column wraps instead. */
+          .team-report-table th:nth-child(1),
+          .team-report-table td:nth-child(1) { width: 5%; }
+          .team-report-table th:nth-child(2),
+          .team-report-table td:nth-child(2) { width: 22%; white-space: normal; }
+          .team-report-table th:nth-child(3),
+          .team-report-table td:nth-child(3) { width: 15%; white-space: normal; }
+          .team-report-table th:nth-child(4),
+          .team-report-table td:nth-child(4) { width: 9%; }
+          .team-report-table th:nth-child(5),
+          .team-report-table td:nth-child(5) { width: 9%; }
+          .team-report-table th:nth-child(6),
+          .team-report-table td:nth-child(6) { width: 8%; }
+          .team-report-table th:nth-child(7),
+          .team-report-table td:nth-child(7) { width: 11%; }
+          .team-report-table th:nth-child(8),
+          .team-report-table td:nth-child(8) { width: 7%; }
+          .team-report-table th:nth-child(9),
+          .team-report-table td:nth-child(9) { width: 5%; }
+          .team-report-table th:nth-child(10),
+          .team-report-table td:nth-child(10) { width: 9%; }
         }
       `}</style>
       {/* Controls */}
@@ -107,7 +151,16 @@ export function TeamReportTable({ data }: Props) {
                     aria-sort={col.key === sortKey ? 'descending' : undefined}
                   >
                     <span className="flex items-center gap-1">
-                      {col.label}
+                      {col.printLabel ? (
+                        <>
+                          {/* Screen keeps full word; print abbreviates (pending
+                              Roger sign-off — see DECISIONS.md open decisions). */}
+                          <span className="print:hidden">{col.label}</span>
+                          <span className="hidden print:inline">{col.printLabel}</span>
+                        </>
+                      ) : (
+                        col.label
+                      )}
                       {col.key === sortKey && <span>↓</span>}
                     </span>
                     {col.subLabel && (

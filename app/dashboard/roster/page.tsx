@@ -5,7 +5,6 @@ import { getAthletes } from '@/lib/db/actions/athletes'
 import { getOnboardingStatus } from '@/lib/db/actions/onboarding'
 import { DeactivateButton } from '@/components/roster/DeactivateButton'
 import { ReactivateButton } from '@/components/roster/ReactivateButton'
-import { ThemeToggle } from '@/components/theme-toggle'
 
 export default async function RosterPage() {
   const { userId } = await auth()
@@ -17,20 +16,19 @@ export default async function RosterPage() {
   const athletes = await getAthletes(true) // include inactive
 
   return (
-    <div className="min-h-screen bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-10">
+    <div className="min-h-full bg-[#EEECEA] dark:bg-[#181A1C] px-8 py-10">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div>
             <Link
               href="/dashboard"
-              className="text-xs text-[#4A83D8] dark:text-[#5A8DEE] hover:underline mb-1 inline-block"
+              className="text-sm text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#0F1515] dark:hover:text-[#F3F4F6] transition-colors focus:outline-none focus-visible:underline mb-1 inline-block"
             >
               ← Dashboard
             </Link>
             <h1 className="text-2xl font-bold text-[#0F1515] dark:text-[#F3F4F6]">Roster</h1>
           </div>
           <div className="flex items-center gap-3">
-            <ThemeToggle />
             <Link
               href="/dashboard/roster/new"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#4A83D8] dark:bg-[#5A8DEE] text-white text-sm font-semibold hover:bg-[#2E65BE] dark:hover:bg-[#4A83D8] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]"

@@ -45,7 +45,7 @@ export default async function SpeedEntryPage({ params }: Props) {
   }))
 
   return (
-    <div className="flex h-screen bg-[#EEECEA] dark:bg-[#181A1C] overflow-hidden">
+    <div className="flex h-full bg-[#EEECEA] dark:bg-[#181A1C] overflow-hidden">
       <SessionSidebar
         sessionId={id}
         date={session.date}

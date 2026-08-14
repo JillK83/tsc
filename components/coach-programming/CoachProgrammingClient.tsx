@@ -452,6 +452,12 @@ export function CoachProgrammingClient({ athletes }: CoachProgrammingClientProps
 
   return (
     <div>
+      <Link
+        href="/dashboard"
+        className="text-sm text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#0F1515] dark:hover:text-[#F3F4F6] transition-colors focus:outline-none focus-visible:underline mb-4 inline-block"
+      >
+        ← Dashboard
+      </Link>
       {/* Page header */}
       <div className="flex items-start justify-between mb-8">
         <div>
@@ -463,12 +469,6 @@ export function CoachProgrammingClient({ athletes }: CoachProgrammingClientProps
           </h1>
         </div>
         <div className="flex items-center gap-2">
-          <Link
-            href="/dashboard"
-            className="px-4 py-2 rounded-xl text-sm font-semibold text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#0F1515] dark:hover:text-[#F3F4F6] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8]"
-          >
-            ← Dashboard
-          </Link>
           <button
             type="button"
             aria-pressed={activeTab === 'mas'}

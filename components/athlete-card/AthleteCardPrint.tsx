@@ -40,11 +40,17 @@ export function AthleteCardPrint({ data }: Props) {
   return (
     <>
       <style>{`
+        /* NOTE: In the Chrome print dialog, uncheck "Headers and footers"
+           for a clean sheet (no URL/date margins). */
         @page {
-          size: letter landscape;
-          margin: 0.75in;
+          size: landscape;
+          margin: 0.5in;
         }
         @media print {
+          /* App chrome off — hides nav bar (wordmark, theme toggle, avatar) */
+          nav { display: none !important; }
+          a { color: #000 !important; text-decoration: none !important; }
+
           html, body {
             background: #fff !important;
             color: #000 !important;
@@ -55,6 +61,12 @@ export function AthleteCardPrint({ data }: Props) {
             border-color: #D1D5DB !important;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
+          }
+          /* Visible border on the MAS tile so hierarchy survives when
+             "Background graphics" is unchecked in the Chrome print dialog. */
+          .mas-print-tile {
+            border: 1.5px solid #000 !important;
+            border-radius: 4px;
           }
         }
       `}</style>
@@ -90,9 +102,9 @@ export function AthleteCardPrint({ data }: Props) {
           <div className="border border-gray-300 rounded mb-4">
             {/* Row 1 */}
             <div className="grid grid-cols-4 border-b border-gray-300">
-              <div className="px-4 py-3 border-r border-gray-300">
+              <div className="mas-print-tile px-4 py-3 border-r border-gray-300">
                 <p className="text-[8px] font-semibold uppercase tracking-wider text-gray-500">MAS (M/S)</p>
-                <p className="text-2xl font-extrabold text-black tabular-nums mt-1">
+                <p className="text-[32px] leading-none font-extrabold text-black tabular-nums mt-1">
                   {mostRecentMas.masMs.toFixed(1)}
                 </p>
               </div>

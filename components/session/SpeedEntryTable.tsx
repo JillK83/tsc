@@ -16,7 +16,6 @@ import {
   SPEED_VALID_MAX,
 } from '@/lib/formulas/speed'
 import { saveSpeedResults } from '@/lib/db/actions/speed-results'
-import { ThemeToggle } from '@/components/theme-toggle'
 
 type Athlete = {
   id: string
@@ -257,8 +256,8 @@ export function SpeedEntryTable({
       )}
 
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-[#D9D3CC] dark:border-[#383C40]">
-        <div>
+      <div className="flex items-center justify-between gap-4 pl-6 pr-8 py-4 border-b border-[#D9D3CC] dark:border-[#383C40]">
+        <div className="min-w-0">
           <h1 className="text-xl font-bold text-[#0F1515] dark:text-[#F3F4F6]">
             Athlete Roster
           </h1>
@@ -266,14 +265,14 @@ export function SpeedEntryTable({
             Enter 10m fly times for the team
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-[#6B7280] dark:text-[#9CA3AF] mr-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="text-sm text-[#6B7280] dark:text-[#9CA3AF] mr-2 flex-shrink-0">
             <span className="font-semibold text-[#0F1515] dark:text-[#F3F4F6]">
               {saveableCount}
             </span>{' '}
             of {athletes.length} athletes entered
           </span>
-          <div className="relative">
+          <div className="relative min-w-0">
             <svg
               width="14"
               height="14"
@@ -291,10 +290,9 @@ export function SpeedEntryTable({
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search athletes…"
               aria-label="Search athletes"
-              className="pl-8 pr-3 py-1.5 text-sm rounded-lg border border-[#D9D3CC] dark:border-[#383C40] bg-[#FAFAF8] dark:bg-[#2D3338] text-[#0F1515] dark:text-[#F3F4F6] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#4A83D8] dark:focus:border-[#5A8DEE] focus:ring-2 focus:ring-[#EBF2FD] dark:focus:ring-[rgba(90,141,238,0.15)] w-[200px]"
+              className="pl-8 pr-3 py-1.5 text-sm rounded-lg border border-[#D9D3CC] dark:border-[#383C40] bg-[#FAFAF8] dark:bg-[#2D3338] text-[#0F1515] dark:text-[#F3F4F6] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#4A83D8] dark:focus:border-[#5A8DEE] focus:ring-2 focus:ring-[#EBF2FD] dark:focus:ring-[rgba(90,141,238,0.15)] w-full max-w-[200px]"
             />
           </div>
-          <ThemeToggle />
         </div>
       </div>
 
@@ -478,7 +476,7 @@ function SpeedEntryRow({ row, onInputChange, onBlur, onNotesChange }: RowProps) 
               </p>
             )}
             {(status === 'valid' || status === 'warning') && computed && (
-              <p className="mt-1 text-[11px] text-center text-[#6B7280] dark:text-[#9CA3AF]">
+              <p className="mt-1 w-[108px] mx-auto text-left text-[11px] text-[#6B7280] dark:text-[#9CA3AF]">
                 → {displayMs(computed.mssMs)} m/s
               </p>
             )}

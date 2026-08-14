@@ -20,11 +20,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider afterSignOutUrl="/sign-in">
       <html
         lang="en"
+        suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       >
+        <head>
+          {/* Set theme before first paint to avoid a wrong-theme flash. */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(){try{var s=localStorage.getItem('theme');var d=s?s==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.classList.toggle('dark',d);}catch(e){}})();`,
+            }}
+          />
+        </head>
         <body className="min-h-full flex flex-col bg-background text-foreground">
           {children}
         </body>
