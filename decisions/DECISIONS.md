@@ -155,6 +155,16 @@
 
 ---
 
+### Coach Programming print — deferred to V1.5
+**Date:** August 2026
+**Decision:** Coach Programming screen is screen-only in V1. Print layout deferred to V1.5.
+**Why:** Roger's V1.5 requirement is a full workout document — 4 weeks of programming with tabs or pages per week, athlete names and distances readable on paper. This is a distinct artifact from the screen calculator, not a CSS override of it.
+**Rule:** When built, the print layout must handle up to 3 intensities × 3 work times (9 data columns) + sticky athlete name column on a single landscape page. Design as a separate print component — same principle as the athlete card print. Do not attempt to print the screen table via @media print.
+**Constraint for current build:** Do not add @media print styles to the Coach Programming screen or the sticky athlete column fix. The screen table and the print table are separate concerns.
+**Alternatives rejected:** Printing the screen table directly (column overflow, sticky positioning breaks in print, no page structure for multi-week format)
+
+---
+
 ### Warning amber token split — three values
 **Date:** August 2026 (design system)
 **Decision:** Warning amber uses three separate tokens: `#A67520` (text), `#C98E24` (border/icon), `#FDF3DC` (tint/background).
