@@ -12,6 +12,31 @@ const SORT_LABELS: Record<SortKey, string> = {
   mss: 'MSS',
 }
 
+function computeRanks(
+  sorted: TeamReportData['athletes'],
+  sortKey: SortKey
+): Map<string, number | null> {
+  const ranks = new Map<string, number | null>()
+  let rank = 1
+  for (let i = 0; i < sorted.length; i++) {
+    const curr = sorted[i]
+    const val =
+      sortKey === 'mas' ? curr.mas.masMs
+      : sortKey === 'vo2max' ? curr.mas.estimatedVo2max
+      : curr.speed?.mssMs ?? null
+    if (val === null || val === undefined) { ranks.set(curr.id, null); continue }
+    if (i > 0) {
+      const prevVal =
+        sortKey === 'mas' ? sorted[i - 1].mas.masMs
+        : sortKey === 'vo2max' ? sorted[i - 1].mas.estimatedVo2max
+        : sorted[i - 1].speed?.mssMs ?? null
+      if (val !== prevVal) rank = i + 1
+    }
+    ranks.set(curr.id, rank)
+  }
+  return ranks
+}
+
 function formatDate(date: Date) {
   return date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' })
 }
@@ -33,6 +58,8 @@ export function TeamReportTable({ data }: Props) {
     }
     return 0
   })
+
+  const ranks = computeRanks(sorted, sortKey)
 
   const colHeaders: { key: SortKey | null; label: string; printLabel?: string; subLabel?: string }[] = [
     { key: null, label: 'Rank' },
@@ -180,7 +207,7 @@ export function TeamReportTable({ data }: Props) {
                 className="border-b last:border-0 border-[#E6E2DE] dark:border-[#30353A] hover:bg-[#FAFAF8] dark:hover:bg-[#2D3338] transition-colors"
               >
                 <td className="px-4 py-3 text-sm font-semibold text-[#0F1515] dark:text-[#F3F4F6] tabular-nums whitespace-nowrap">
-                  {athlete.teamRank !== null ? `#${athlete.teamRank}` : '—'}
+                  {(ranks.get(athlete.id) ?? null) !== null ? `#${ranks.get(athlete.id)}` : '—'}
                 </td>
                 <td className="px-4 py-3 text-sm font-medium">
                   <Link
