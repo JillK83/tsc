@@ -17,19 +17,29 @@ function computeRanks(
   sortKey: SortKey
 ): Map<string, number | null> {
   const ranks = new Map<string, number | null>()
+
+  const getValue = (a: TeamReportData['athletes'][number]) =>
+    sortKey === 'mas' ? a.mas.masMs
+    : sortKey === 'vo2max' ? a.mas.estimatedVo2max
+    : a.speed?.mssMs ?? null
+
+  const validCount = sorted.filter((a) => {
+    const v = getValue(a)
+    return v !== null && v !== undefined
+  }).length
+
+  if (validCount < 2) {
+    for (const a of sorted) ranks.set(a.id, null)
+    return ranks
+  }
+
   let rank = 1
   for (let i = 0; i < sorted.length; i++) {
     const curr = sorted[i]
-    const val =
-      sortKey === 'mas' ? curr.mas.masMs
-      : sortKey === 'vo2max' ? curr.mas.estimatedVo2max
-      : curr.speed?.mssMs ?? null
+    const val = getValue(curr)
     if (val === null || val === undefined) { ranks.set(curr.id, null); continue }
     if (i > 0) {
-      const prevVal =
-        sortKey === 'mas' ? sorted[i - 1].mas.masMs
-        : sortKey === 'vo2max' ? sorted[i - 1].mas.estimatedVo2max
-        : sorted[i - 1].speed?.mssMs ?? null
+      const prevVal = getValue(sorted[i - 1])
       if (val !== prevVal) rank = i + 1
     }
     ranks.set(curr.id, rank)
@@ -60,6 +70,11 @@ export function TeamReportTable({ data }: Props) {
   })
 
   const ranks = computeRanks(sorted, sortKey)
+
+  const displayRank = (athlete: TeamReportData['athletes'][number]) => {
+    if (sortKey === 'mas') return athlete.teamRank
+    return ranks.get(athlete.id) ?? null
+  }
 
   const colHeaders: { key: SortKey | null; label: string; printLabel?: string; subLabel?: string }[] = [
     { key: null, label: 'Rank' },
@@ -207,7 +222,7 @@ export function TeamReportTable({ data }: Props) {
                 className="border-b last:border-0 border-[#E6E2DE] dark:border-[#30353A] hover:bg-[#FAFAF8] dark:hover:bg-[#2D3338] transition-colors"
               >
                 <td className="px-4 py-3 text-sm font-semibold text-[#0F1515] dark:text-[#F3F4F6] tabular-nums whitespace-nowrap">
-                  {(ranks.get(athlete.id) ?? null) !== null ? `#${ranks.get(athlete.id)}` : '—'}
+                  {displayRank(athlete) !== null ? `#${displayRank(athlete)}` : '—'}
                 </td>
                 <td className="px-4 py-3 text-sm font-medium">
                   <Link

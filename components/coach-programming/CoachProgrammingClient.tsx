@@ -29,9 +29,11 @@ const ASR_WORK_TIMES = [6, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 90, 120, 150,
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
+const YARDS_PER_METER = 1.09361
+
 // Final display step: Math.round after all formula calcs, then convert to yards if needed.
 function convertDist(rawM: number, unit: 'm' | 'yd'): number {
-  return unit === 'yd' ? Math.round(rawM * 1.09361) : Math.round(rawM)
+  return unit === 'yd' ? Math.round(rawM * YARDS_PER_METER) : Math.round(rawM)
 }
 
 // Groups athletes by a display key (rounded to 1 decimal), sorted descending.
@@ -141,12 +143,11 @@ function MasPanel({ athletes, unit }: { athletes: ProgrammingAthlete[]; unit: 'm
     ProgrammingAthlete & { masMs: number }
   >
 
-  const displayAthletes =
+  const allGroups = groupByDisplayed(masAthletes, (a) => a.masMs)
+  const groups =
     mode === 'individual' && selectedId
-      ? masAthletes.filter((a) => a.id === selectedId)
-      : masAthletes
-
-  const groups = groupByDisplayed(displayAthletes, (a) => a.masMs)
+      ? allGroups.filter((g) => g.athletes.some((a) => a.id === selectedId))
+      : allGroups
 
   const sortedIntensities = [...intensities].sort((a, b) => a - b)
   const sortedWorkTimes = [...workTimes].sort((a, b) => a - b)
@@ -263,8 +264,9 @@ function MasPanel({ athletes, unit }: { athletes: ProgrammingAthlete[]; unit: 'm
               </tr>
             </thead>
             <tbody>
-              {groups.map((group, i) => {
+              {groups.map((group) => {
                 const masVal = group.numericValue
+                const rank = allGroups.findIndex((g) => g.key === group.key) + 1
                 return (
                   <tr key={group.key} className="group/row">
                     <td
@@ -279,7 +281,7 @@ function MasPanel({ athletes, unit }: { athletes: ProgrammingAthlete[]; unit: 'm
                     >
                       <div className="flex flex-col justify-center h-full">
                         <span className="text-[11px] text-[#6B7280] dark:text-[#9CA3AF] block mb-1">
-                          #{i + 1} · {group.key} m/s
+                          #{rank} · {group.key} m/s
                         </span>
                         <AthleteNameChips athletes={group.athletes} />
                       </div>
@@ -300,7 +302,7 @@ function MasPanel({ athletes, unit }: { athletes: ProgrammingAthlete[]; unit: 'm
                             CELL_HOVER,
                           ].join(' ')}
                         >
-                          {isShuttle ? `${cv} / ${cv}${unit}` : `${cv}${unit}`}
+                          {isShuttle ? `${cv}${unit} / ${cv}${unit}` : `${cv}${unit}`}
                         </td>
                       )
                     })}
