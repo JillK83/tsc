@@ -152,6 +152,7 @@
 **Decision:** Coach Programming Screen is screen-only in V1. No print button, no CSV export.
 **Why:** V1 scope. Screen display satisfies the GA workflow. Print and export are V2+ if requested.
 **Important:** All distances on this screen are computed at display time. Never stored.
+**Amendment (August 2026):** Print deferred to V1.5 (not V2+) per Roger's confirmed requirement. See "Coach Programming print — deferred to V1.5" entry for full spec.
 
 ---
 
@@ -285,6 +286,8 @@
 
 - Active program persistence — upgrade from cookie to `current_program_id` column on `users` table in V1.5 when multi-device or multi-user access is needed
 - School logo slot in nav bar: file already exists at `public/logos/school-logo.png` (unused after the logo was removed in Phase 7A). When the official FDU asset arrives, add it back to the nav bar **right cluster, before the theme toggle**. Target dimensions **44×44px**, `object-fit: contain`, transparent PNG preferred; **keep nav bar height at 64px** (no increase needed). Request the FDU **athletic mark** — the sword + outlined "FDU" letters on a **transparent** background (the earlier `fdu_png_logo.png`), NOT the shield crest / university seal, and not the maroon-background version (a maroon square reads as a colored box on the dark navy nav). The white-outline letterforms read cleanly at 44px on navy. Wire to the hardcoded `/public/logos/school-logo.png` for the V1.5 pilot; migrate to a `logo_url` column on the `schools` table in V3 when multi-school support lands.
+- Neon production readiness — upgrade to Launch plan ($19/month) before pilot to disable scale to zero (eliminates cold start delays after inactivity) and extend restore window from 0.3 days to 7 days. Read replicas deferred to V3. IP allowlist — assess at scale. Risk if not addressed: cold start on first request on test day; data loss window if deletion happens late in day.
+- Coach Programming weekly workout templates (8-week block) — Roger's current workflow produces a periodized 8-week program per athlete with two parallel tracks: VO2max (MAS-based shuttle HIIT) and RSA (repeat sprint ability). Per week: intensity %, work:rest format, sets×reps, computed distances per athlete, notes. The feature would allow Roger to define a week-by-week progression template and the app computes individualized distances per athlete per week from stored MAS. Output: printable 8-week program card per athlete replacing the current per-athlete Google Sheet tab. Key observations from Yugo and CJ CSV files in /project: distances are athlete-specific (Yugo 68/68m vs CJ 59/59m at same intensity/work time), week 4 and week 8 are always unload weeks, two tracks run in parallel per week, notes are coach-editable per week. Schema addition needed in V1.5: program_templates table. Distances always computed at display time — never stored.
 
 ---
 
@@ -304,6 +307,7 @@
 - [ ] Clerk magic link — test delivery to school email addresses (spam filter risk)
 - [ ] Vercel URL / domain — set before sharing with director
 - [ ] Beta Log Google Doc — create and share with GA consultant
+- [ ] Neon plan upgrade — upgrade to Launch plan before first pilot test session. Go/no-go: scale to zero must be disabled and restore window at 7 days minimum before Roger uses the system with real data.
 
 ---
 
