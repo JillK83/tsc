@@ -216,13 +216,15 @@ export function TeamReportTable({ data }: Props) {
             </tr>
           </thead>
           <tbody>
-            {sorted.map((athlete) => (
+            {sorted.map((athlete) => {
+              const rank = displayRank(athlete)
+              return (
               <tr
                 key={athlete.id}
                 className="border-b last:border-0 border-[#E6E2DE] dark:border-[#30353A] hover:bg-[#FAFAF8] dark:hover:bg-[#2D3338] transition-colors"
               >
                 <td className="px-4 py-3 text-sm font-semibold text-[#0F1515] dark:text-[#F3F4F6] tabular-nums whitespace-nowrap">
-                  {displayRank(athlete) !== null ? `#${displayRank(athlete)}` : '—'}
+                  {rank !== null ? `#${rank}` : '—'}
                 </td>
                 <td className="px-4 py-3 text-sm font-medium">
                   <Link
@@ -260,7 +262,8 @@ export function TeamReportTable({ data }: Props) {
                   {formatDate(athlete.mas.createdAt)}
                 </td>
               </tr>
-            ))}
+              )
+            })}
           </tbody>
         </table>
       </div>

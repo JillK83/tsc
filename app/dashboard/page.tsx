@@ -135,10 +135,6 @@ export default async function DashboardPage() {
                     </td>
                     <td className="px-6 py-3 text-right">
                       <div className="flex items-center justify-end gap-4">
-                        <DeleteSessionButton
-                          sessionId={s.id}
-                          hasResults={sessionResultSet.has(s.id)}
-                        />
                         {s.testType === '20M_MST' && sessionResultSet.has(s.id) && (
                           <Link
                             href={`/dashboard/session/${s.id}/report`}
@@ -147,6 +143,10 @@ export default async function DashboardPage() {
                             View Report →
                           </Link>
                         )}
+                        <DeleteSessionButton
+                          sessionId={s.id}
+                          hasResults={sessionResultSet.has(s.id)}
+                        />
                         <Link
                           href={
                             s.testType === '20M_MST'

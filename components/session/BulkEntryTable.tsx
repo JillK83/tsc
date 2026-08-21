@@ -257,7 +257,7 @@ export function BulkEntryTable({ sessionId, athletes, existingResults }: Props) 
       <div className="flex items-center justify-between gap-4 pl-6 pr-8 py-4 border-b border-[#D9D3CC] dark:border-[#383C40]">
         <div className="min-w-0">
           <h1 className="text-xl font-bold text-[#0F1515] dark:text-[#F3F4F6]">
-            Athlete Roster
+            Test Session — 20m MST
           </h1>
           <p className="text-sm text-[#6B7280] dark:text-[#9CA3AF]">
             Enter individual results for the team
@@ -295,7 +295,7 @@ export function BulkEntryTable({ sessionId, athletes, existingResults }: Props) 
       </div>
 
       {/* Table */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto pb-16">
         <table className="w-full table-fixed">
           <thead className="sticky top-0 bg-[#FFFFFF] dark:bg-[#262A2F] z-10">
             <tr className="border-b border-[#D9D3CC] dark:border-[#383C40]">
@@ -344,7 +344,7 @@ export function BulkEntryTable({ sessionId, athletes, existingResults }: Props) 
       )}
 
       {/* Bottom bar */}
-      <div className="flex items-center justify-between px-6 py-4 border-t border-[#D9D3CC] dark:border-[#383C40] bg-[#FFFFFF] dark:bg-[#262A2F]">
+      <div className="fixed bottom-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-6 bg-white dark:bg-[#262A2F] border-t border-[#D9D3CC] dark:border-[#383C40]">
         <button
           type="button"
           onClick={() => {

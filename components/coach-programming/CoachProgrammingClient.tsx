@@ -111,7 +111,7 @@ function AthleteNameChips({ athletes }: { athletes: ProgrammingAthlete[] }) {
       {athletes.map((a) => (
         <span
           key={a.id}
-          className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-[#FAFAF8] dark:bg-[#2D3338] text-[#0F1515] dark:text-[#F3F4F6]"
+          className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-[#FAFAF8] dark:bg-[#2D3338] text-[#0F1515] dark:text-[#F3F4F6] border border-[#E6E2DE] dark:border-[#30353A]"
         >
           {a.name}
         </span>
@@ -120,12 +120,10 @@ function AthleteNameChips({ athletes }: { athletes: ProgrammingAthlete[] }) {
   )
 }
 
-function EmptyState() {
+function EmptyState({ message = 'Select intensity and work time to generate distances' }: { message?: string }) {
   return (
     <div className="flex items-center justify-center py-16">
-      <p className="text-sm text-[#6B7280] dark:text-[#9CA3AF]">
-        Select intensity and work time to generate distances
-      </p>
+      <p className="text-sm text-[#6B7280] dark:text-[#9CA3AF]">{message}</p>
     </div>
   )
 }
@@ -206,25 +204,38 @@ function MasPanel({ athletes, unit }: { athletes: ProgrammingAthlete[]; unit: 'm
               }}
             />
             {mode === 'individual' && (
-              <select
-                value={selectedId}
-                onChange={(e) => setSelectedId(e.target.value)}
-                className="ml-2 px-3 py-1.5 text-sm rounded-lg border border-[#D9D3CC] dark:border-[#383C40] bg-[#FFFFFF] dark:bg-[#262A2F] text-[#0F1515] dark:text-[#F3F4F6] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8] dark:focus-visible:ring-[#5A8DEE]"
-              >
-                <option value="">Select athlete…</option>
-                {masAthletes.map((a) => (
-                  <option key={a.id} value={a.id}>
-                    {a.name}
-                  </option>
-                ))}
-              </select>
+              <div className="relative ml-2">
+                <select
+                  value={selectedId}
+                  onChange={(e) => setSelectedId(e.target.value)}
+                  className="pl-3 pr-8 py-1.5 text-sm rounded-lg border border-[#D9D3CC] dark:border-[#383C40] bg-[#FFFFFF] dark:bg-[#262A2F] text-[#0F1515] dark:text-[#F3F4F6] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8] dark:focus-visible:ring-[#5A8DEE] min-w-[200px] appearance-none"
+                >
+                  <option value="">Select athlete…</option>
+                  {masAthletes.map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.name}
+                    </option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center text-[#6B7280] dark:text-[#9CA3AF]">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+              </div>
             )}
           </div>
         </div>
       </div>
 
       {/* Table */}
-      {!hasSelections ? (
+      {mode === 'individual' && !selectedId && !hasSelections ? (
+        <div className="flex items-center justify-center py-16">
+          <p className="text-sm text-[#6B7280] dark:text-[#9CA3AF]">
+            Select an athlete and choose intensity and work time to generate distances.
+          </p>
+        </div>
+      ) : !hasSelections ? (
         <EmptyState />
       ) : awaitingAthlete ? (
         <div className="flex items-center justify-center py-16">
@@ -381,18 +392,25 @@ function AsrPanel({ athletes, unit }: { athletes: ProgrammingAthlete[]; unit: 'm
             }}
           />
           {mode === 'individual' && (
-            <select
-              value={selectedId}
-              onChange={(e) => setSelectedId(e.target.value)}
-              className="ml-2 px-3 py-1.5 text-sm rounded-lg border border-[#D9D3CC] dark:border-[#383C40] bg-[#FFFFFF] dark:bg-[#262A2F] text-[#0F1515] dark:text-[#F3F4F6] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8] dark:focus-visible:ring-[#5A8DEE]"
-            >
-              <option value="">Select athlete…</option>
-              {withBoth.map((a) => (
-                <option key={a.id} value={a.id}>
-                  {a.name}
-                </option>
-              ))}
-            </select>
+            <div className="relative ml-2">
+              <select
+                value={selectedId}
+                onChange={(e) => setSelectedId(e.target.value)}
+                className="pl-3 pr-8 py-1.5 text-sm rounded-lg border border-[#D9D3CC] dark:border-[#383C40] bg-[#FFFFFF] dark:bg-[#262A2F] text-[#0F1515] dark:text-[#F3F4F6] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A83D8] dark:focus-visible:ring-[#5A8DEE] min-w-[200px] appearance-none"
+              >
+                <option value="">Select athlete…</option>
+                {withBoth.map((a) => (
+                  <option key={a.id} value={a.id}>
+                    {a.name}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center text-[#6B7280] dark:text-[#9CA3AF]">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                  <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+            </div>
           )}
         </div>
       </div>
@@ -405,8 +423,14 @@ function AsrPanel({ athletes, unit }: { athletes: ProgrammingAthlete[]; unit: 'm
       )}
 
       {/* Table */}
-      {!hasSelections ? (
-        <EmptyState />
+      {mode === 'individual' && !selectedId && !hasSelections ? (
+        <div className="flex items-center justify-center py-16">
+          <p className="text-sm text-[#6B7280] dark:text-[#9CA3AF]">
+            Select an athlete and choose ASR% and work time to generate distances.
+          </p>
+        </div>
+      ) : !hasSelections ? (
+        <EmptyState message="Select ASR% and work time to generate distances." />
       ) : awaitingAthlete ? (
         <div className="flex items-center justify-center py-16">
           <p className="text-sm text-[#6B7280] dark:text-[#9CA3AF]">
@@ -460,7 +484,10 @@ function AsrPanel({ athletes, unit }: { athletes: ProgrammingAthlete[]; unit: 'm
                       <span className="text-[11px] text-[#6B7280] dark:text-[#9CA3AF] block mb-1">
                         {a.asrMs.toFixed(1)}
                       </span>
-                      <span className="px-3 py-1 rounded-full text-sm font-medium bg-[#FAFAF8] dark:bg-[#2D3338] text-[#0F1515] dark:text-[#F3F4F6] inline-block">
+                      <span
+                        title={a.name}
+                        className="px-3 py-1 rounded-full text-sm font-medium bg-[#FAFAF8] dark:bg-[#2D3338] text-[#0F1515] dark:text-[#F3F4F6] border border-[#E6E2DE] dark:border-[#30353A] inline-block max-w-[160px] truncate"
+                      >
                         {a.name}
                       </span>
                     </div>
@@ -520,9 +547,6 @@ export function CoachProgrammingClient({ athletes }: CoachProgrammingClientProps
       {/* Page header */}
       <div className="flex items-start justify-between mb-8">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-[#9CA3AF] mb-1">
-            Coach Tools
-          </p>
           <h1 className="text-2xl font-bold text-[#0F1515] dark:text-[#F3F4F6]">
             Coach Programming
           </h1>

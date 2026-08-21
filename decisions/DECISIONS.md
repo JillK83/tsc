@@ -273,6 +273,14 @@
 
 ---
 
+### DeleteSessionButton trigger contrast — deferred
+**Date:** August 2026
+**Decision:** The "Delete" trigger text on the dashboard sessions table uses `#9CA3AF` (~2.6:1 contrast) in its default muted state — fails WCAG 2AA. Deferred from Phase 7E to keep the delete modal commit clean.
+**Fix when addressed:** Use `text/secondary` (`#6B7280` light / `#9CA3AF` dark) which passes at 5.0:1, or `text/primary` if the action warrants more visual weight. Pre-existing issue, not introduced in Phase 7E.
+**File:** `components/session/DeleteSessionButton.tsx` — trigger button `className`.
+
+---
+
 ## V1.5 deferred — revisit at second user / multi-device
 
 - Active program persistence — upgrade from cookie to `current_program_id` column on `users` table in V1.5 when multi-device or multi-user access is needed
