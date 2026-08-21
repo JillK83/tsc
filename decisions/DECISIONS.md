@@ -299,15 +299,8 @@
 
 ---
 
-## Open decisions — resolve before building those components
-
-- [ ] Team report print column header — "Estimated VO2max" vs "Est. VO2max": full word causes print layout compression. Pending Roger sign-off on compact exception for print context only. Screen version keeps full word regardless of outcome.
-- [ ] Product name — finalize before public beta
-- [x] Neon RLS policies — written and applied in Phase 1 (school_isolation on all 7 tables, live in Neon)
-- [ ] Clerk magic link — test delivery to school email addresses (spam filter risk)
-- [ ] Vercel URL / domain — set before sharing with director
-- [ ] Beta Log Google Doc — create and share with GA consultant
-- [ ] Neon plan upgrade — upgrade to Launch plan before first pilot test session. Go/no-go: scale to zero must be disabled and restore window at 7 days minimum before Roger uses the system with real data.
+## Open decisions
+See `/docs/roadmap.md` — Open decisions section.
 
 ---
 
